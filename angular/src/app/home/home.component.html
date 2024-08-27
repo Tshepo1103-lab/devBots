@@ -13,8 +13,8 @@
       <div class="row">
         <div class="col-12">
           <div class="alert alert-info alert-dismissible">
-            <h6><i class="icon fa fa-info"></i> This is a sample Dashboard which doesn't show any server side data.
-              However, you can develop your own dashboard inspired by this one and its source code.</h6>
+            <!-- <h6><i class="icon fa fa-info"></i> This is a sample Dashboard which doesn't show any server side data.
+              However, you can develop your own dashboard inspired by this one and its source code.</h6> -->
           </div>
         </div>
       </div>
@@ -22,11 +22,11 @@
         <div class="col-lg-3 col-6">
           <div class="small-box bg-success">
             <div class="inner">
-              <h3>8.2k+</h3>
-              <p>Stargazers</p>
+              <h3>{{dummyDataTotalHours}}</h3>
+              <p>Total hours spent</p>
             </div>
             <div class="icon">
-              <i class="fas fa-star"></i>
+              <i class="material-symbols-outlined">calendar_month</i>
             </div>
             <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/stargazers"
               class="small-box-footer"
@@ -39,11 +39,11 @@
         <div class="col-lg-3 col-6">
           <div class="small-box bg-info">
             <div class="inner">
-              <h3>140+</h3>
-              <p>Contributors</p>
+              <h3>{{dummyDataWeeklyHours}}</h3>
+              <p>Hours spent this week</p>
             </div>
             <div class="icon">
-              <i class="fas fa-users"></i>
+              <i class="material-symbols-outlined">date_range</i>
             </div>
             <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/graphs/contributors"
               class="small-box-footer"
@@ -56,11 +56,11 @@
         <div class="col-lg-3 col-6">
           <div class="small-box bg-warning">
             <div class="inner">
-              <h3>1.6k+</h3>
-              <p>Used / Dependents</p>
+              <h3>{{dummyDataDailyHours}}</h3>
+              <p>Hours spent today</p>
             </div>
             <div class="icon">
-              <i class="fas fa-tools"></i>
+              <i class="material-symbols-outlined">today</i>
             </div>
             <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/network/dependents"
               class="small-box-footer"
@@ -73,11 +73,11 @@
         <div class="col-lg-3 col-6">
           <div class="small-box bg-primary">
             <div class="inner">
-              <h3>3.1k+</h3>
-              <p>Forks</p>
+              <h3>{{dummyDataAverageHours}}</h3>
+              <p>Average hours daily</p>
             </div>
             <div class="icon">
-              <i class="fas fa-code"></i>
+              <i class="material-symbols-outlined">calendar_clock</i>
             </div>
             <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/network/members"
               class="small-box-footer"
