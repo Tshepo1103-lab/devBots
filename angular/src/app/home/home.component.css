@@ -1,0 +1,188 @@
+body {
+    font-family:'Times New Roman', Times, serif;
+    background-color: var(--deep-black);
+    color: bla;
+    line-height: 1.6;
+}
+
+.content-header {
+    background-color: var(--deep-black);
+    border-bottom: 5px solid var(--bright-blue);
+    height: 120px;
+}
+
+.content-header h1 {
+    margin: 0;
+    font-size: 4rem;
+    font-weight: 600;
+    letter-spacing: 5px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    color: var(--bright-blue);
+}
+
+.alert-info {
+    background-color: var(--deep-black);
+    border: 2px solid var(--bright-blue);
+    color: var(--text-blue);
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.1);
+    width: 80%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.alert-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.alert-info h6 {
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+.small-box {
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0, 123, 255, 0.15);
+}
+
+.small-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 123, 255, 0.25);
+}
+
+.small-box > .inner {
+    padding: 1.5rem;
+}
+
+#stargazers_etc {
+    .small-box h3 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0 0 10px 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .small-box p {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--soft-orange);
+        margin-bottom: 0;
+    }
+
+    .small-box .icon {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 4rem;
+        color: red;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .small-box:hover .icon {
+        font-size: 5rem;
+        opacity: 0.5;
+    }
+
+    .small-box-footer {
+        background-color: var(--bright-blue);
+        color: var(--calm-green);
+        text-align: center;
+        padding: 0.75rem 0;
+        text-decoration: none;
+        font-weight: 600;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+    }
+
+    .small-box-footer:hover {
+        background-color: var(--light-blue);
+        color: var(--deep-black);
+    }
+}
+
+#commits_etc {
+    .info-box {
+        background-color: pink;
+        border-radius: 20px;
+        margin-bottom: 1.5rem;
+        min-height: 100px;
+        padding: 1rem;
+        position: relative;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 15px rgba(0, 123, 255, 0.1);
+    }
+
+    .info-box:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 20px rgba(0, 123, 255, 0.2);
+    }
+
+    .info-box .info-box-icon {
+        border-radius: 15px;
+        align-items: center;
+        display: flex;
+        font-size: 2.5rem;
+        justify-content: center;
+        text-align: center;
+        width: 80px;
+        height: 80px;
+        background-color: var(--bright-blue);
+        color: var(--white);
+        transition: all 0.3s ease;
+    }
+
+    .info-box:hover .info-box-icon {
+        background-color: var(--light-blue);
+    }
+
+    .info-box .info-box-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        line-height: 1.8;
+        flex: 1;
+        padding: 0 1rem;
+    }
+
+    .info-box .info-box-text {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-blue);
+    }
+
+    .info-box .info-box-number {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--bright-blue);
+    }
+}
+
+/* Additional styles for smooth appearance */
+.container-fluid {
+    padding: 2rem;
+}
+
+.row {
+    margin-bottom: 2rem;
+}
+
+/* Ensuring all boxes use the same color scheme */
+.bg-success, .bg-warning, .bg-info, .bg-primary {
+    background-color: var(--soft-black) !important;
+    color: var(--text-blue);
+}
+
+/* Bubble-like text effect */
+h1, h3, p, .info-box-text, .info-box-number {
+    text-shadow: 0 1px 2px rgba(0, 123, 255, 0.2);
+}

@@ -8,7 +8,8 @@ Chart.register(...registerables);
 @Component({
   templateUrl: './home.component.html',
   animations: [appModuleAnimation()],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush, 
+  styleUrls:['./home.component.css']
 })
 export class HomeComponent extends AppComponentBase implements AfterViewInit {
   @ViewChild('barChart') private chartRef: ElementRef;
