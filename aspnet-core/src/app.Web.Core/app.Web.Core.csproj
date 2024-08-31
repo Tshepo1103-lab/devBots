@@ -28,5 +28,6 @@
     <PackageReference Include="Abp.AspNetCore" Version="9.3.0" />
     <PackageReference Include="Abp.ZeroCore" Version="9.3.0" />
     <PackageReference Include="Abp.AspNetCore.SignalR" Version="9.3.0" />
+    <PackageReference Include="System.Linq" Version="4.3.0" />
   </ItemGroup>
 </Project>

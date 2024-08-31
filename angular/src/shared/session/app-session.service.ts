@@ -46,7 +46,7 @@ export class AppSessionService {
             return userName;
         }
 
-        return (this._tenant ? this._tenant.tenancyName : '.') + '\\' + userName;
+        return (this._tenant ? this._tenant.tenancyName : '') + userName;
     }
 
     init(): Promise<boolean> {
@@ -63,9 +63,10 @@ export class AppSessionService {
         });
     }
 
+    // this disable need for tenant
     changeTenantIfNeeded(tenantId?: number): boolean {
         if (this.isCurrentTenant(tenantId)) {
-            return false;
+            return true;
         }
 
         abp.multiTenancy.setTenantIdCookie(tenantId);

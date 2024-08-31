@@ -39,6 +39,11 @@ import { SidebarLogoComponent } from './layout/sidebar-logo.component';
 import { SidebarUserPanelComponent } from './layout/sidebar-user-panel.component';
 import { SidebarMenuComponent } from './layout/sidebar-menu.component';
 
+//Timesheet
+
+import {TimeSheetCompoment} from './timesheets/timesheet.component';
+import {CreateTimeSheetDialogComponent} from './timesheets/create-timesheet/create-timesheet-dialog.component';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -67,7 +72,10 @@ import { SidebarMenuComponent } from './layout/sidebar-menu.component';
         SidebarComponent,
         SidebarLogoComponent,
         SidebarUserPanelComponent,
-        SidebarMenuComponent
+        SidebarMenuComponent,
+
+        //Timesheet
+        TimeSheetCompoment
     ],
     imports: [
         CommonModule,
