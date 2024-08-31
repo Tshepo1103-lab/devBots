@@ -31,9 +31,10 @@ namespace app.Services.TimeSheets
         ///  Get All the TimeSheet
         /// </summary>
         /// <returns></returns>
-        public async Task<List<TimeSheet>> GetAllAsync() => await _timesheetRepository.GetAllIncluding(x=>x.User,x=>x.TimeLog)
-                                                                                      .AsQueryable()
-                                                                                      .Where(x=>x.User.Id==AbpSession.UserId).ToListAsync();
+        public async Task<List<TimeSheet>> GetAllAsync()
+        {
+            return await _timesheetRepository.GetAllIncluding(x => x.User, x => x.TimeLog).AsQueryable().Where(x => x.User.Id == AbpSession.UserId).ToListAsync();
+        }
 
   
 
