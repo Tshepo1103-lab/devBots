@@ -8,7 +8,13 @@ namespace app.Domain
     {
 
         public User? User { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public TimeLog? TimeLog { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public DateTime? DateRecording { get; set; }
     }
 }

@@ -1,14 +1,19 @@
 ﻿using Abp.Application.Services;
 using Abp.Authorization;
 using Abp.Domain.Repositories;
+using Abp.Extensions;
 using app.Authorization.Users;
 using app.Domain;
+using app.Services.Timelog.Dto;
 using app.Services.Timelogs;
+using app.Services.Timesheet.Dto;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static app.Services.Timesheet.Dto.GraphDto;
 
 
 namespace app.Services.TimeSheets
@@ -79,5 +84,56 @@ namespace app.Services.TimeSheets
             input.TimeLog = await _timelogService.CreateAsync(input.TimeLog);
             return await _timesheetRepository.InsertAsync(input);
         }
+
+
+        [HttpGet]
+        public async Task<PeriodStatsDto> GetPeriodStats(DateTime periodStart, DateTime periodEnd)
+        {
+            if (periodEnd < periodStart)
+            {
+                throw new ArgumentException("Period end date must be greater than start date.");
+            }
+
+            var timeSheets = await _timesheetRepository.GetAllIncluding(x => x.User, x => x.TimeLog)
+                                                       .Where(x => x.User.Id == AbpSession.UserId && x.DateRecording >= periodStart && x.DateRecording <= periodEnd)
+                                                       .OrderBy(x => x.DateRecording)
+                                                       .ToListAsync();
+
+            var weeklyStats = timeSheets.GroupBy(ts => new
+            {
+                WeekStart = ts.DateRecording.Value.StartOfWeek(DayOfWeek.Monday),
+                WeekEnd = ts.DateRecording.Value.EndOfWeek(DayOfWeek.Monday)
+            })
+            .Select(weekGroup => new AllWeekStatsDto
+            {
+                WeekStart = weekGroup.Key.WeekStart,
+                WeekEnd = weekGroup.Key.WeekEnd,
+                DailyStats = weekGroup.GroupBy(ts => ts.DateRecording.Value.Date)
+                                      .Select(dayGroup => new DayDto
+                                      {
+                                          DateRecording = dayGroup.Key,
+                                          TimeLogs = new List<TimeLog>
+                                          {
+                                          new TimeLog
+                                          {
+                                              NumberOfHours = dayGroup.Sum(ts => ts.TimeLog.NumberOfHours),
+                                          }
+                                          }
+                                      })
+                                      .OrderBy(dayDto => dayDto.DateRecording)
+                                      .ToList()
+            }).ToList();
+
+            var periodStats = new PeriodStatsDto
+            {
+                PeriodStart = periodStart,
+                PeriodEnd = periodEnd,
+                WeeklyStats = weeklyStats
+            };
+
+            return periodStats;
+        }
+
+
     }
 }
