@@ -22,3 +22,45 @@ Clone the repository to your local machine using the following command:
 git clone https://github.com/your-repo-name.git
 ```
 
+### 2. Create a new database
+
+Create a new SQL Server database. Copy the server name and database name, as these will be used in your connection string.
+
+### 2. Run your backend
+
+- Open the ASP.NET Core solution in Visual Studio.
+
+- Set app.Web.Host as the startup project.
+
+- Go to your app settings and configure your connection string
+   `"Default": "Server=YourServerName; Database=YourDb; Trusted_Connection=True; TrustServerCertificate=True;"`
+-  Click on `Tools> Nugget Package Manager`
+-  Select  `EF Core` as the default project
+-  Run the following command
+-  add-migration `migrationName`
+-  Once that is succesfull run `update-database`
+-  Once that is done your can run your entire project
+
+  ### 3. Run your frontend
+
+  - Open the angular folder
+  - open  `new terminal`
+  - execute the following command `npm i -f`
+  - execute  `npm run start ` to start the application
+  - A localhost link will be provided, open the link\
+  - Wala!, you have your application : )
+
+
+
+## Additional Information 
+
+#### To log in as the admin use the following credentials:
+
+`username: admin
+password: 123qwe`
+  - 
+
+  additionally you can register a new user and user the credentials to log in
+  
+
+
