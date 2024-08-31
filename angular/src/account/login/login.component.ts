@@ -25,7 +25,7 @@ export class LoginComponent extends AppComponentBase {
 
   get isSelfRegistrationAllowed(): boolean {
     if (!this._sessionService.tenantId) {
-      return false;
+      return true;
     }
 
     return true;

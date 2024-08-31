@@ -11,10 +11,11 @@ using Abp.Runtime.Session;
 using Abp.UI;
 using app.Authorization.Roles;
 using app.MultiTenancy;
+using Abp.Dependency;
 
 namespace app.Authorization.Users
 {
-    public class UserRegistrationManager : DomainService
+    public class UserRegistrationManager : DomainService, ITransientDependency
     {
         public IAbpSession AbpSession { get; set; }
 
@@ -39,13 +40,13 @@ namespace app.Authorization.Users
 
         public async Task<User> RegisterAsync(string name, string surname, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed)
         {
-            CheckForTenant();
+            //CheckForTenant();
 
-            var tenant = await GetActiveTenantAsync();
+            //var tenant = await GetActiveTenantAsync();
 
             var user = new User
             {
-                TenantId = tenant.Id,
+                TenantId = 0,
                 Name = name,
                 Surname = surname,
                 EmailAddress = emailAddress,
@@ -59,10 +60,10 @@ namespace app.Authorization.Users
            
             foreach (var defaultRole in await _roleManager.Roles.Where(r => r.IsDefault).ToListAsync())
             {
-                user.Roles.Add(new UserRole(tenant.Id, user.Id, defaultRole.Id));
+                user.Roles.Add(new UserRole(0, user.Id, defaultRole.Id));
             }
 
-            await _userManager.InitializeOptionsAsync(tenant.Id);
+            await _userManager.InitializeOptionsAsync(0);
 
             CheckErrors(await _userManager.CreateAsync(user, plainPassword));
             await CurrentUnitOfWork.SaveChangesAsync();

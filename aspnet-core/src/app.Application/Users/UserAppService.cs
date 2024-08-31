@@ -25,7 +25,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace app.Users
 {
-    [AbpAuthorize(PermissionNames.Pages_Users)]
     public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUserResultRequestDto, CreateUserDto, UserDto>, IUserAppService
     {
         private readonly UserManager _userManager;
@@ -59,8 +58,8 @@ namespace app.Users
 
             var user = ObjectMapper.Map<User>(input);
 
-            user.TenantId = AbpSession.TenantId;
-            user.IsEmailConfirmed = true;
+            //user.TenantId = AbpSession.TenantId;
+            //user.IsEmailConfirmed = true;
 
             await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
 
@@ -76,6 +75,8 @@ namespace app.Users
             return MapToEntityDto(user);
         }
 
+
+        [AbpAuthorize(PermissionNames.Pages_Users)]
         public override async Task<UserDto> UpdateAsync(UserDto input)
         {
             CheckUpdatePermission();
@@ -94,12 +95,16 @@ namespace app.Users
             return await GetAsync(input);
         }
 
+
+        [AbpAuthorize(PermissionNames.Pages_Users)]
         public override async Task DeleteAsync(EntityDto<long> input)
         {
             var user = await _userManager.GetUserByIdAsync(input.Id);
             await _userManager.DeleteAsync(user);
         }
 
+
+        [AbpAuthorize(PermissionNames.Pages_Users)]
         [AbpAuthorize(PermissionNames.Pages_Users_Activation)]
         public async Task Activate(EntityDto<long> user)
         {
@@ -118,12 +123,15 @@ namespace app.Users
             });
         }
 
+        [AbpAuthorize(PermissionNames.Pages_Users)]
         public async Task<ListResultDto<RoleDto>> GetRoles()
         {
             var roles = await _roleRepository.GetAllListAsync();
             return new ListResultDto<RoleDto>(ObjectMapper.Map<List<RoleDto>>(roles));
         }
 
+
+        [AbpAuthorize(PermissionNames.Pages_Users)]
         public async Task ChangeLanguage(ChangeUserLanguageDto input)
         {
             await SettingManager.ChangeSettingForUserAsync(
@@ -133,6 +141,8 @@ namespace app.Users
             );
         }
 
+
+        [AbpAuthorize(PermissionNames.Pages_Users)]
         protected override User MapToEntity(CreateUserDto createInput)
         {
             var user = ObjectMapper.Map<User>(createInput);
@@ -187,6 +197,8 @@ namespace app.Users
             identityResult.CheckErrors(LocalizationManager);
         }
 
+
+        [AbpAuthorize(PermissionNames.Pages_Users)]
         public async Task<bool> ChangePassword(ChangePasswordDto input)
         {
             await _userManager.InitializeOptionsAsync(AbpSession.TenantId);
@@ -212,6 +224,8 @@ namespace app.Users
             return true;
         }
 
+
+        [AbpAuthorize(PermissionNames.Pages_Users)]
         public async Task<bool> ResetPassword(ResetPasswordDto input)
         {
             if (_abpSession.UserId == null)
