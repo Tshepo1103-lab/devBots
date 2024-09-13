@@ -7,9 +7,9 @@ import {
   PagedRequestDto
 } from '@shared/paged-listing-component-base';
 import {
-  RoleServiceProxy,
-  RoleDto,
-  RoleDtoPagedResultDto
+  TimeSheetServiceProxy,
+  TimeSheetDto,
+  TimeSheetDtoPagedResultDto
 } from '@shared/service-proxies/service-proxies';
 
 import { CreateTimeSheetDialogComponent } from './create-timesheet/create-timesheet-dialog.component';
@@ -23,17 +23,17 @@ class PagedTimeSheetRequestDto extends PagedRequestDto {
   templateUrl: './timesheet.component.html',
   animations: [appModuleAnimation()]
 })
-export class TimeSheetCompoment extends PagedListingComponentBase<RoleDto>{
+export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
     constructor(
         injector: Injector,
-        private _rolesService: RoleServiceProxy,
+        private _rolesService: TimeSheetServiceProxy,
         private _modalService: BsModalService
       ) {
         super(injector);
       }
     
     
-    roles:RoleDto[];
+    roles:TimeSheetDto[];
     pageSize = 5;
     pageNumber =1;
     totalItems=0;
@@ -54,20 +54,21 @@ export class TimeSheetCompoment extends PagedListingComponentBase<RoleDto>{
               finishedCallback();
             })
           )
-          .subscribe((result: RoleDtoPagedResultDto) => {
+          .subscribe((result: TimeSheetDtoPagedResultDto) => {
             this.roles = result.items;
             this.showPaging(result, pageNumber);
+            console.log(result)
           });
       }
     
-      delete(role: RoleDto): void {
+      delete(timesheet: TimeSheetDto): void {
         abp.message.confirm(
-          this.l('RoleDeleteWarningMessage', role.displayName),
+          this.l('TimeSheet Delete warning', timesheet.dateRecording),
           undefined,
           (result: boolean) => {
             if (result) {
               this._rolesService
-                .delete(role.id)
+                .delete(timesheet.id)
                 .pipe(
                   finalize(() => {
                     abp.notify.success(this.l('SuccessfullyDeleted'));
@@ -83,9 +84,12 @@ export class TimeSheetCompoment extends PagedListingComponentBase<RoleDto>{
     defaulter(): void {
         
     }
-
+    createTimeSheet(): void {
+      this.showCreateOrEditRoleDialog();
+    }
     showCreateOrEditRoleDialog(id?: number): void {
         let createOrEditRoleDialog: BsModalRef;
+        console.log('id',id)
         if (!id) {
           createOrEditRoleDialog = this._modalService.show(
             CreateTimeSheetDialogComponent,

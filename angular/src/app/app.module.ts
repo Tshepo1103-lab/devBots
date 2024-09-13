@@ -75,7 +75,8 @@ import {CreateTimeSheetDialogComponent} from './timesheets/create-timesheet/crea
         SidebarMenuComponent,
 
         //Timesheet
-        TimeSheetCompoment
+        TimeSheetCompoment,
+        CreateTimeSheetDialogComponent 
     ],
     imports: [
         CommonModule,

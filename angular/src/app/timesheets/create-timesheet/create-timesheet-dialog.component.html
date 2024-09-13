@@ -1,7 +1,4 @@
-<DIV>
-  
-</DIV>
-<!-- <form
+<form
   class="form-horizontal"
   autocomplete="off"
   #createTimeSheetForm="ngForm"
@@ -14,86 +11,52 @@
   <div class="modal-body">
     <tabset>
       <tab [heading]="'Details' | localize" class="pt-3 px-2">
+        <!-- Date Recording Input -->
         <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="name">
-            {{ "ProjectName" | localize }}
+          <label class="col-md-3 col-form-label" for="dateRecording">
+            {{ "DateRecording" | localize }}
           </label>
           <div class="col-md-9">
             <input
-              type="text"
+              type="date"
               class="form-control"
-              name="name"
-              id="name"
+              name="dateRecording"
+              id="dateRecording"
               required
-              minlength="2"
-              maxlength="32"
-              [(ngModel)]="role.name"
-              #nameModel="ngModel"
-              #nameEl
+              [(ngModel)]="timeSheet.dateRecording"
+              [max]="currentDate"
+              #dateRecordingModel="ngModel"
+              #dateRecordingEl
             />
             <abp-validation-summary
-              [control]="nameModel"
-              [controlEl]="nameEl"
+              [control]="dateRecordingModel"
+              [controlEl]="dateRecordingEl"
             ></abp-validation-summary>
           </div>
         </div>
+        <!-- Number of Hours Input -->
         <div class="form-group row required">
-          <label class="col-md-3 col-form-label" for="displayName">
-            {{ "DisplayName" | localize }}
+          <label class="col-md-3 col-form-label" for="numberOfHours">
+            {{ "NumberOfHours" | localize }}
           </label>
           <div class="col-md-9">
             <input
-              type="text"
+              type="number"
               class="form-control"
-              name="displayName"
-              id="displayName"
+              name="numberOfHours"
+              id="numberOfHours"
               required
-              minlength="2"
-              maxlength="32"
-              [(ngModel)]="role.displayName"
-              #displayNameModel="ngModel"
-              #displayNameEl
+              min="1"
+              step="0.1"
+              [(ngModel)]="timeSheet.timelog"
+              #numberOfHoursModel="ngModel"
+              #numberOfHoursEl
             />
             <abp-validation-summary
-              [control]="displayNameModel"
-              [controlEl]="displayNameEl"
+              [control]="numberOfHoursModel"
+              [controlEl]="numberOfHoursEl"
             ></abp-validation-summary>
           </div>
-        </div>
-        <div class="form-group row mb-0">
-          <label class="col-md-3 col-form-label" for="description">
-            {{ "RoleDescription" | localize }}
-          </label>
-          <div class="col-md-9">
-            <textarea
-              type="text"
-              class="form-control"
-              name="description"
-              id="description"
-              [(ngModel)]="role.description"
-            >
-            </textarea>
-          </div>
-        </div>
-      </tab>
-      <tab [heading]="'Permissions' | localize" class="pt-3 px-2">
-        <div class="form-group row mb-0">
-          <ng-container *ngFor="let permission of permissions; let i = index">
-            <div class="col-md-6">
-              <div class="custom-control custom-checkbox">
-                <input
-                  type="checkbox"
-                  class="custom-control-input"
-                  [id]="'permission_' + i"
-                  [checked]="isPermissionChecked(permission.name)"
-                  (change)="onPermissionChange(permission, $event)"
-                />
-                <label class="custom-control-label" [for]="'permission_' + i">
-                  {{ permission.displayName }}
-                </label>
-              </div>
-            </div>
-          </ng-container>
         </div>
       </tab>
     </tabset>
@@ -103,4 +66,4 @@
     [saveDisabled]="!createTimeSheetForm.form.valid || saving"
     (onCancelClick)="bsModalRef.hide()"
   ></abp-modal-footer>
-</form> -->
+</form>

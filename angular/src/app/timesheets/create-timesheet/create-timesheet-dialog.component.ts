@@ -8,13 +8,14 @@ import {
   import { BsModalRef } from 'ngx-bootstrap/modal';
   import { AppComponentBase } from '@shared/app-component-base';
   import {
-    RoleServiceProxy,
-    RoleDto,
+    TimeSheetDto,
     PermissionDto,
-    CreateRoleDto,
-    PermissionDtoListResultDto
+    CreateTimeSheetDto,
+    PermissionDtoListResultDto,
+    TimeSheetServiceProxy
   } from '@shared/service-proxies/service-proxies';
   import { forEach as _forEach, map as _map } from 'lodash-es';
+import * as moment from 'moment';
   
   @Component({
     templateUrl: 'create-timesheet-dialog.component.html'
@@ -22,7 +23,8 @@ import {
   export class CreateTimeSheetDialogComponent extends AppComponentBase
     implements OnInit {
     saving = false;
-    role = new RoleDto();
+    currentDate: string;
+    timeSheet = new TimeSheetDto();
     permissions: PermissionDto[] = [];
     checkedPermissionsMap: { [key: string]: boolean } = {};
     defaultPermissionCheckedStatus = true;
@@ -31,56 +33,23 @@ import {
   
     constructor(
       injector: Injector,
-      private _roleService: RoleServiceProxy,
+      private _roleService: TimeSheetServiceProxy,
       public bsModalRef: BsModalRef
     ) {
       super(injector);
+      this.currentDate = moment().format('YYYY-MM-DD');
     }
   
     ngOnInit(): void {
-      this._roleService
-        .getAllPermissions()
-        .subscribe((result: PermissionDtoListResultDto) => {
-          this.permissions = result.items;
-          this.setInitialPermissionsStatus();
-        });
-    }
   
-    setInitialPermissionsStatus(): void {
-      _map(this.permissions, (item) => {
-        this.checkedPermissionsMap[item.name] = this.isPermissionChecked(
-          item.name
-        );
-      });
     }
-  
-    isPermissionChecked(permissionName: string): boolean {
-      // just return default permission checked status
-      // it's better to use a setting
-      return this.defaultPermissionCheckedStatus;
-    }
-  
-    onPermissionChange(permission: PermissionDto, $event) {
-      this.checkedPermissionsMap[permission.name] = $event.target.checked;
-    }
-  
-    getCheckedPermissions(): string[] {
-      const permissions: string[] = [];
-      _forEach(this.checkedPermissionsMap, function (value, key) {
-        if (value) {
-          permissions.push(key);
-        }
-      });
-      return permissions;
-    }
-  
+
+
     save(): void {
       this.saving = true;
   
-      const role = new CreateRoleDto();
-      role.init(this.role);
-      role.grantedPermissions = this.getCheckedPermissions();
-  
+      const role = new CreateTimeSheetDto();
+      role.init({dateRecording:this.timeSheet.dateRecording,timelog:{numberOfHours:this.timeSheet.timelog}});
       this._roleService
         .create(role)
         .subscribe(
