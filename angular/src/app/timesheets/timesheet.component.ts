@@ -1,4 +1,5 @@
 import { Component, Injector } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
@@ -25,10 +26,13 @@ class PagedTimeSheetRequestDto extends PagedRequestDto {
   styleUrls:["../../index.css", './timesheet.component.css']
 })
 export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
-    constructor(
+  periodStart: string; // Declare periodStart
+  periodEnd: string;   // Declare periodEnd
+  constructor(
         injector: Injector,
         private _rolesService: TimeSheetServiceProxy,
-        private _modalService: BsModalService
+        private _modalService: BsModalService,
+        private http: HttpClient,
       ) {
         super(injector);
       }
@@ -65,6 +69,21 @@ export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
             console.log(result)
           });
       }
+
+      exportToCSV(periodS: string = new Date(this.periodStart).toISOString(), periodE: string = new Date(this.periodEnd).toISOString()): void {
+        const url = `https://localhost:44311/api/services/app/TimeSheet/ExportAsCSV?periodStart=${periodS}&periodEnd=${periodE}`; // URL to web api
+        this.http.post(url, {}, { responseType: 'blob' as 'json' }).subscribe((response: Blob) => {
+          const downloadUrl = window.URL.createObjectURL(response);
+          const link = document.createElement('a');
+          link.href = downloadUrl;
+          link.download = 'Timesheet.csv';
+          document.body.appendChild(link); // Append to body to ensure it works in all browsers
+          link.click();
+          document.body.removeChild(link); // Clean up
+          window.URL.revokeObjectURL(downloadUrl);
+        });
+      }
+    
     
       delete(timesheet: TimeSheetDto): void {
         abp.message.confirm(
