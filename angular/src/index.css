@@ -32,4 +32,11 @@ a {
 
 button {
     font-family: Inter;
+    font-size: 17px;
+    background-color: transparent !important;
+    color: #005cbf !important;
+}
+
+button:hover {
+    background-color: #005cbf35 !important; 
 }
