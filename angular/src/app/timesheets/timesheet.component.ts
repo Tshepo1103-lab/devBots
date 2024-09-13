@@ -1,4 +1,5 @@
 import { Component, Injector } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
