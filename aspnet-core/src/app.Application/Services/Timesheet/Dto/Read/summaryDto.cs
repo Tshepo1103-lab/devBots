@@ -10,5 +10,6 @@ namespace app.Services.Timesheet.Dto.Read
     {
         public int? TotalUserHours { get; set; }
         public long DaysUserWorked { get; set; }
+        public int? TotalUserStreak { get; set; }
     }
 }
