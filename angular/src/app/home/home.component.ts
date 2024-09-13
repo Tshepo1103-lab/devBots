@@ -10,7 +10,7 @@ Chart.register(...registerables);
   templateUrl: './home.component.html',
   animations: [appModuleAnimation()],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css', '../../index.css']
 })
 export class HomeComponent extends AppComponentBase implements AfterViewInit {
   @ViewChild('barChart') private chartRef: ElementRef;
@@ -29,6 +29,11 @@ export class HomeComponent extends AppComponentBase implements AfterViewInit {
       console.log(data);
     });
   }
+
+  hoursToday = Number(2).toLocaleString()
+  hoursThisWeek = Number(10).toLocaleString()
+  hoursThisMonth = Number(150).toLocaleString()
+  hoursThisYear = Number(50000).toLocaleString()
 
   createChart() {
     const dummyData = {
