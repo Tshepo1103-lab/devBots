@@ -12,74 +12,51 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-lg-3 col-6">
-          <div class="small-box bg-success">
+          <div class="small-box bg-warning">
             <div class="inner">
-              <h3>8.2k+</h3>
-              <p>Stargazers</p>
+              <h3>10</h3>
+              <p>Hours Worked Today</p>
             </div>
             <div class="icon">
-              <i class="fas fa-star"></i>
+              <i class="fas fa-calendar-day"></i>
             </div>
-            <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/stargazers"
-              class="small-box-footer"
-              target="_blank">
-              More info
-              <i class="fas fa-arrow-circle-right"></i>
-            </a>
-          </div>
-        </div>
-        <div class="col-lg-3 col-6">
-          <div class="small-box bg-info">
-            <div class="inner">
-              <h3>140+</h3>
-              <p>Contributors</p>
-            </div>
-            <div class="icon">
-              <i class="fas fa-users"></i>
-            </div>
-            <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/graphs/contributors"
-              class="small-box-footer"
-              target="_blank">
-              More info
-              <i class="fas fa-arrow-circle-right"></i>
-            </a>
           </div>
         </div>
         <div class="col-lg-3 col-6">
           <div class="small-box bg-warning">
             <div class="inner">
-              <h3>1.6k+</h3>
-              <p>Used / Dependents</p>
+              <h3>80</h3>
+              <p>Hours This Week</p>
             </div>
             <div class="icon">
-              <i class="fas fa-tools"></i>
+              <i class="fas fa-calendar-week"></i>
             </div>
-            <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/network/dependents"
-              class="small-box-footer"
-              target="_blank">
-              More info
-              <i class="fas fa-arrow-circle-right"></i>
-            </a>
           </div>
         </div>
         <div class="col-lg-3 col-6">
-          <div class="small-box bg-primary">
+          <div class="small-box bg-warning">
             <div class="inner">
-              <h3>3.1k+</h3>
-              <p>Forks</p>
+              <h3>1000</h3>
+              <p>Hours Worked This Month</p>
             </div>
             <div class="icon">
-              <i class="fas fa-code"></i>
+              <i class="fas fa-calendar-alt"></i>
             </div>
-            <a href="https://github.com/aspnetboilerplate/aspnetboilerplate/network/members"
-              class="small-box-footer"
-              target="_blank">
-              More info
-              <i class="fas fa-arrow-circle-right"></i>
-            </a>
+          </div>
+        </div>
+        <div class="col-lg-3 col-6">
+          <div class="small-box bg-warning">
+            <div class="inner">
+              <h3>49000</h3>
+              <p>Hours Worked This Year</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-calendar"></i>
+            </div>
           </div>
         </div>
       </div>
+      <button (click)="getMembers()">Get dev bots members</button>
       <div class="row">
         <div class="col-md-12">
           <div style="display: flex; justify-content: center; align-items: center; height: 400px;">

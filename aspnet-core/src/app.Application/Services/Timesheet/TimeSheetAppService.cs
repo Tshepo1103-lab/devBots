@@ -4,7 +4,6 @@ using Abp.Domain.Repositories;
 using Abp.Extensions;
 using app.Authorization.Users;
 using app.Domain;
-using app.Services.Timelog.Dto;
 using app.Services.Timelogs;
 using app.Services.Timesheet.Dto;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static app.Services.Timesheet.Dto.GraphDto;
+using app.Services.Timesheet.Dto.Read;
 
 
 namespace app.Services.TimeSheets
@@ -106,15 +106,15 @@ namespace app.Services.TimeSheets
             })
             .Select(weekGroup => new AllWeekStatsDto
             {
-                WeekStart = weekGroup.Key.WeekStart,
-                WeekEnd = weekGroup.Key.WeekEnd,
+/*              WeekStart = weekGroup.Key.WeekStart,
+                WeekEnd = weekGroup.Key.WeekEnd,*/
                 DailyStats = weekGroup.GroupBy(ts => ts.DateRecording.Value.Date)
                                       .Select(dayGroup => new DayDto
                                       {
                                           DateRecording = dayGroup.Key,
-                                          TimeLogs = new List<TimeLog>
+                                          TimeLogs = new List<TimeLogDto>
                                           {
-                                          new TimeLog
+                                          new TimeLogDto
                                           {
                                               NumberOfHours = dayGroup.Sum(ts => ts.TimeLog.NumberOfHours),
                                           }
@@ -126,8 +126,6 @@ namespace app.Services.TimeSheets
 
             var periodStats = new PeriodStatsDto
             {
-                PeriodStart = periodStart,
-                PeriodEnd = periodEnd,
                 WeeklyStats = weeklyStats
             };
 
