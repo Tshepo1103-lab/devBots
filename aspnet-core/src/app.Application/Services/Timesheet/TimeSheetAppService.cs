@@ -132,6 +132,25 @@ namespace app.Services.TimeSheets
             return periodStats;
         }
 
+        [HttpGet]
+        public async Task<summaryDto> GetAllSumStats()
+        {
+
+            var timeSheets = await _timesheetRepository.GetAllIncluding(x => x.User, x => x.TimeLog)
+                                                       .Where(x => x.User.Id == AbpSession.UserId)
+                                                       .ToListAsync();
+
+            var totalUserHours = timeSheets.Sum(ts => ts.TimeLog.NumberOfHours);
+            var daysUserWorked = timeSheets.Count();
+
+            return new summaryDto
+            {
+                TotalUserHours = totalUserHours,
+                DaysUserWorked = daysUserWorked
+            };
+        }
+
+
 
     }
 }
