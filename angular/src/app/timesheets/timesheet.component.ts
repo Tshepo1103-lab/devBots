@@ -44,9 +44,9 @@ export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
   default: string;
   keyword: string;
 
-  dailyStreak = 2
-  totalHours = Number(1000).toLocaleString()
-  totalDays = Number(400).toLocaleString()
+  dailyStreak = 0
+  totalHours = Number(0).toLocaleString()
+  totalDays = Number(0).toLocaleString()
 
   ngOnInit(): void {
     this.getAllSumStats().subscribe((response: any) => {
