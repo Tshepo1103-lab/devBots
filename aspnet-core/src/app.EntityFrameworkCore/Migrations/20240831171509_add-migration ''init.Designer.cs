@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using app.EntityFrameworkCore;
 
@@ -11,9 +12,11 @@ using app.EntityFrameworkCore;
 namespace app.Migrations
 {
     [DbContext(typeof(appDbContext))]
-    partial class appDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240831171509_add-migration ''init")]
+    partial class addmigrationinit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1583,86 +1586,6 @@ namespace app.Migrations
                     b.ToTable("AbpUsers");
                 });
 
-            modelBuilder.Entity("app.Domain.TimeLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int?>("NumberOfHours")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TimeLogs");
-                });
-
-            modelBuilder.Entity("app.Domain.TimeSheet", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("CreatorUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DateRecording")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("DeleterUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("LastModifierUserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<Guid?>("TimeLogId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long?>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TimeLogId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("TimeSheets");
-                });
-
             modelBuilder.Entity("app.MultiTenancy.Tenant", b =>
                 {
                     b.Property<int>("Id")
@@ -1943,21 +1866,6 @@ namespace app.Migrations
                     b.Navigation("DeleterUser");
 
                     b.Navigation("LastModifierUser");
-                });
-
-            modelBuilder.Entity("app.Domain.TimeSheet", b =>
-                {
-                    b.HasOne("app.Domain.TimeLog", "TimeLog")
-                        .WithMany()
-                        .HasForeignKey("TimeLogId");
-
-                    b.HasOne("app.Authorization.Users.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("TimeLog");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("app.MultiTenancy.Tenant", b =>

@@ -89,10 +89,10 @@ export class AccountServiceProxy {
      * @return OK
      */
     register(body: RegisterInput | undefined): Observable<RegisterOutput> {
-        let url_ = this.baseUrl + "/api/services/app/Account/Register";
+        let url_ = this.baseUrl + "/api/services/app/User/Create";
         url_ = url_.replace(/[?&]$/, "");
 
-        const content_ = JSON.stringify(body);
+        const content_ = JSON.stringify({...body,isActive:true});
 
         let options_ : any = {
             body: content_,
@@ -655,6 +655,341 @@ export class RoleServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = RoleDtoPagedResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+}
+
+@Injectable()
+export class TimeSheetServiceProxy{
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl ?? "";
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    create(body: CreateTimeSheetDto | undefined): Observable<TimeSheetDto> {
+        let url_ = this.baseUrl + "/api/services/app/TimeSheet/Create";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TimeSheetDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TimeSheetDto>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<TimeSheetDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RoleDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getTimeSheets(permission: string | undefined): Observable<TimeSheetListDtoListResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/TimeSheet/GetAll?";
+        if (permission === null)
+            throw new Error("The parameter 'permission' cannot be null.");
+        else if (permission !== undefined)
+            url_ += "Permission=" + encodeURIComponent("" + permission) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTimeSheets(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTimeSheets(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TimeSheetDtoListResultDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TimeSheetDtoListResultDto>;
+        }));
+    }    
+
+    protected processGetTimeSheets(response: HttpResponseBase): Observable<TimeSheetDtoListResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TimeSheetDtoListResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    update(body: TimeSheetDto | undefined): Observable<TimeSheetDto> {
+        let url_ = this.baseUrl + "/api/services/app/TimeSheet/Update";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TimeSheetDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TimeSheetDto>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<TimeSheetDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = RoleDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    delete(id: string | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/services/app/TimeSheet/Delete?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    get(id: number | undefined): Observable<TimeSheetDto> {
+        let url_ = this.baseUrl + "/api/services/app/TimeSheet/Get?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "Id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TimeSheetDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TimeSheetDto>;
+        }));
+    }
+
+    protected processGet(response: HttpResponseBase): Observable<TimeSheetDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TimeSheetDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    getAll(keyword: string | undefined, skipCount: number | undefined, maxResultCount: number | undefined): Observable<TimeSheetDtoPagedResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/TimeSheet/GetAll?";
+        if (keyword === null)
+            throw new Error("The parameter 'keyword' cannot be null.");
+        else if (keyword !== undefined)
+            url_ += "Keyword=" + encodeURIComponent("" + keyword) + "&";
+        if (skipCount === null)
+            throw new Error("The parameter 'skipCount' cannot be null.");
+        else if (skipCount !== undefined)
+            url_ += "SkipCount=" + encodeURIComponent("" + skipCount) + "&";
+        if (maxResultCount === null)
+            throw new Error("The parameter 'maxResultCount' cannot be null.");
+        else if (maxResultCount !== undefined)
+            url_ += "MaxResultCount=" + encodeURIComponent("" + maxResultCount) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TimeSheetDtoPagedResultDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TimeSheetDtoPagedResultDto>;
+        }));
+    }
+
+    protected processGetAll(response: HttpResponseBase): Observable<TimeSheetDtoPagedResultDto> {
+       
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            console.log('result200',resultData200)
+            result200 = TimeSheetDtoPagedResultDto.fromJS(resultData200);
+            
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1408,6 +1743,32 @@ export class UserServiceProxy {
         }));
     }
 
+    getTimeSheets(): Observable<TimeSheetDtoListResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/TimeSheet/GetAll";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetTimeSheet(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetTimeSheet(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<TimeSheetDtoListResultDto>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<TimeSheetDtoListResultDto>;
+        }));
+    }
+    
     protected processGetRoles(response: HttpResponseBase): Observable<RoleDtoListResultDto> {
         const status = response.status;
         const responseBlob =
@@ -1420,6 +1781,28 @@ export class UserServiceProxy {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
             result200 = RoleDtoListResultDto.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    protected processGetTimeSheet(response: HttpResponseBase): Observable<TimeSheetDtoListResultDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = TimeSheetDtoListResultDto.fromJS(resultData200);
             return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1722,6 +2105,8 @@ export class UserServiceProxy {
         }
         return _observableOf(null as any);
     }
+
+
 }
 
 export class ApplicationInfoDto implements IApplicationInfoDto {
@@ -2091,6 +2476,56 @@ export interface ICreateRoleDto {
     normalizedName: string | undefined;
     description: string | undefined;
     grantedPermissions: string[] | undefined;
+}
+
+export class CreateTimeSheetDto implements ICreateTimesheetDto {
+    timelog? : {numberOfHours?: number};
+    dateRecording? : string;
+
+    constructor(data?: ICreateTimesheetDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+        this.timelog = { numberOfHours: 0 };
+    }
+
+    init(_data?: ICreateTimesheetDto) {
+        if (_data) {
+            this.dateRecording = moment(_data["dateRecording"]).toISOString();
+            console.log('This timelog before',_data.timelog.numberOfHours)
+            this.timelog.numberOfHours = _data.timelog.numberOfHours;
+            console.log('This timelog after',this.timelog)
+        }
+    }
+
+    static fromJS(data: any): CreateTimeSheetDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateTimeSheetDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["dateRecording"] = moment(this.dateRecording).toISOString();
+        data["timelog"] = this.timelog;
+        return data;
+    }
+
+    clone(): CreateTimeSheetDto {
+        const json = this.toJSON();
+        let result = new CreateTimeSheetDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface ICreateTimesheetDto {
+    timelog? : {numberOfHours?: number};
+    dateRecording? : moment.Moment|string;
 }
 
 export class CreateTenantDto implements ICreateTenantDto {
@@ -2854,6 +3289,52 @@ export class RoleDto implements IRoleDto {
     }
 }
 
+export class TimeSheetDto implements ITimeSheetDto {
+    id: string;
+    timelog: any;
+    dateRecording: moment.Moment;
+
+    constructor(data?: ITimeSheetDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            console.log('in dto',_data)
+            this.id = _data["id"];
+            this.timelog = _data["timeLog"];
+            this.dateRecording = _data["dateRecording"]?moment(_data["dateRecording"].toString()).format("YYYY-MM-DD") : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): TimeSheetDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TimeSheetDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["timelog"] = this.timelog;
+        data["dateRecording"] = this.dateRecording;
+        return data;
+    }
+
+    clone(): TimeSheetDto {
+        const json = this.toJSON();
+        let result = new TimeSheetDto();
+        result.init(json);
+        return result;
+    }
+}
+
 export interface IRoleDto {
     id: number;
     name: string;
@@ -2861,6 +3342,59 @@ export interface IRoleDto {
     normalizedName: string | undefined;
     description: string | undefined;
     grantedPermissions: string[] | undefined;
+}
+
+export interface ITimeSheetDto {
+    id:string;
+    timelog:string;
+    dateRecording:moment.Moment;
+}
+
+export class TimeSheetDtoListResultDto implements ITimeSheetDtoListResultDto {
+    items: TimeSheetDto[] | undefined;
+
+    constructor(data?: ITimeSheetDtoListResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(TimeSheetDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): TimeSheetDtoListResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TimeSheetDtoListResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): TimeSheetDtoListResultDto {
+        const json = this.toJSON();
+        let result = new TimeSheetDtoListResultDto();
+        result.init(json);
+        return result;
+    }
 }
 
 export class RoleDtoListResultDto implements IRoleDtoListResultDto {
@@ -2908,6 +3442,10 @@ export class RoleDtoListResultDto implements IRoleDtoListResultDto {
         result.init(json);
         return result;
     }
+}
+
+export interface ITimeSheetDtoListResultDto {
+    items: TimeSheetDto[] | undefined;
 }
 
 export interface IRoleDtoListResultDto {
@@ -2964,8 +3502,64 @@ export class RoleDtoPagedResultDto implements IRoleDtoPagedResultDto {
     }
 }
 
+export class TimeSheetDtoPagedResultDto implements ITimeSheetDtoPagedResultDto {
+    items: TimeSheetDto[] | undefined;
+    totalCount: number;
+
+    constructor(data?: ITimeSheetDtoPagedResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            console.log('data',_data)
+            if (Array.isArray(_data)) {
+                this.items = [] as any;
+                for (let item of _data)
+                    this.items.push(TimeSheetDto.fromJS(item));
+            }
+            this.totalCount = _data["totalCount"];
+        }
+    }
+
+    static fromJS(data: any): TimeSheetDtoPagedResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TimeSheetDtoPagedResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        data["totalCount"] = this.totalCount;
+        return data;
+    }
+
+    clone(): TimeSheetDtoPagedResultDto {
+        const json = this.toJSON();
+        let result = new TimeSheetDtoPagedResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
 export interface IRoleDtoPagedResultDto {
     items: RoleDto[] | undefined;
+    totalCount: number;
+}
+
+export interface ITimeSheetDtoPagedResultDto {
+    items: TimeSheetDto[] | undefined;
     totalCount: number;
 }
 
@@ -3020,12 +3614,61 @@ export class RoleEditDto implements IRoleEditDto {
     }
 }
 
+export class TimeSheetEditDto implements ITimeSheetEditDto {
+    id: string;
+    timelog: any;
+    dateRecording: moment.Moment;
+
+    constructor(data?: ITimeSheetEditDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.timelog = _data["timelog"];
+        }
+    }
+
+    static fromJS(data: any): TimeSheetEditDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TimeSheetEditDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["timelog"] = this.timelog;
+        return data;
+    }
+
+    clone(): TimeSheetEditDto {
+        const json = this.toJSON();
+        let result = new TimeSheetEditDto();
+        result.init(json);
+        return result;
+    }
+}
+
 export interface IRoleEditDto {
     id: number;
     name: string;
     displayName: string;
     description: string | undefined;
     isStatic: boolean;
+}
+
+export interface ITimeSheetEditDto {
+    id: string;
+    timelog: any;
+    dateRecording: moment.Moment;
 }
 
 export class RoleListDto implements IRoleListDto {
@@ -3082,6 +3725,51 @@ export class RoleListDto implements IRoleListDto {
     }
 }
 
+export class TimeSheetListDto implements ITimeSheetListDto {
+    id: string;
+    timelog: any;
+    dateRecording: moment.Moment;
+
+    constructor(data?: TimeSheetListDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.timelog = _data["timelog"];
+            this.dateRecording = _data["dateRecording"]?moment(_data["dateRecording"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): TimeSheetListDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TimeSheetListDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["timelog"] = this.timelog; 
+        data["dateRecording"] = this.dateRecording ? this.dateRecording.toISOString() : <any>undefined;
+        return data;
+    }
+
+    clone(): TimeSheetListDto {
+        const json = this.toJSON();
+        let result = new TimeSheetListDto();
+        result.init(json);
+        return result;
+    }
+}
+
 export interface IRoleListDto {
     id: number;
     name: string | undefined;
@@ -3089,6 +3777,12 @@ export interface IRoleListDto {
     isStatic: boolean;
     isDefault: boolean;
     creationTime: moment.Moment;
+}
+
+export interface ITimeSheetListDto{
+    id: string;
+    timelog:any;
+    dateRecording:moment.Moment;
 }
 
 export class RoleListDtoListResultDto implements IRoleListDtoListResultDto {
@@ -3138,8 +3832,59 @@ export class RoleListDtoListResultDto implements IRoleListDtoListResultDto {
     }
 }
 
+export class TimeSheetListDtoListResultDto implements ITimeSheetListDtoResultDto {
+    items: TimeSheetListDto[] | undefined;
+
+    constructor(data?: ITimeSheetListDtoResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(TimeSheetListDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): TimeSheetListDtoListResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TimeSheetListDtoListResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): TimeSheetListDtoListResultDto {
+        const json = this.toJSON();
+        let result = new TimeSheetListDtoListResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
 export interface IRoleListDtoListResultDto {
     items: RoleListDto[] | undefined;
+}
+
+export interface ITimeSheetListDtoResultDto{
+    items: TimeSheetListDto [] | undefined;
 }
 
 export enum TenantAvailabilityState {

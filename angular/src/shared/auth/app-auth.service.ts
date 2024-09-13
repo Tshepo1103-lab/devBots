@@ -63,6 +63,7 @@ export class AppAuthService {
                 authenticateResult.expireInSeconds,
                 this.rememberMe
             );
+            this._router.navigate(['/app/home'])
         } else {
             // Unexpected result!
 

@@ -6,5 +6,6 @@ namespace app.Domain
     public class TimeLog : FullAuditedEntity<Guid>
     {
         public int? NumberOfHours { get; set; }
+      
     }
 }
