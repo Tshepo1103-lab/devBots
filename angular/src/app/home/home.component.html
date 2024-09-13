@@ -14,7 +14,8 @@
         <div class="col-lg-3 col-6">
           <div class="small-box bg-warning">
             <div class="inner">
-              <h3>10</h3>
+              <h3>{{hoursToday}}</h3>
+              <br />
               <p>Hours Worked Today</p>
             </div>
             <div class="icon">
@@ -25,7 +26,8 @@
         <div class="col-lg-3 col-6">
           <div class="small-box bg-warning">
             <div class="inner">
-              <h3>80</h3>
+              <h3>{{hoursThisWeek}}</h3>
+              <br />
               <p>Hours This Week</p>
             </div>
             <div class="icon">
@@ -36,8 +38,9 @@
         <div class="col-lg-3 col-6">
           <div class="small-box bg-warning">
             <div class="inner">
-              <h3>1000</h3>
-              <p>Hours Worked This Month</p>
+              <h3>{{hoursThisMonth}}</h3>
+              <br />
+              <p>Hours This Month</p>
             </div>
             <div class="icon">
               <i class="fas fa-calendar-alt"></i>
@@ -47,8 +50,9 @@
         <div class="col-lg-3 col-6">
           <div class="small-box bg-warning">
             <div class="inner">
-              <h3>49000</h3>
-              <p>Hours Worked This Year</p>
+              <h3>{{hoursThisYear}}</h3>
+              <br />
+              <p>Hours This Year</p>
             </div>
             <div class="icon">
               <i class="fas fa-calendar"></i>
@@ -56,7 +60,6 @@
           </div>
         </div>
       </div>
-      <button (click)="getMembers()">Get dev bots members</button>
       <div class="row">
         <div class="col-md-12">
           <div style="display: flex; justify-content: center; align-items: center; height: 400px;">

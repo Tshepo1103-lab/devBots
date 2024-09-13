@@ -21,7 +21,8 @@ class PagedTimeSheetRequestDto extends PagedRequestDto {
 
 @Component({
   templateUrl: './timesheet.component.html',
-  animations: [appModuleAnimation()]
+  animations: [appModuleAnimation()], 
+  styleUrls:["../../index.css", './timesheet.component.css']
 })
 export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
     constructor(
@@ -39,6 +40,10 @@ export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
     totalItems=0;
     default:string;
     keyword: string;
+
+    dailyStreak = 2
+    totalHours = Number(1000).toLocaleString()
+    totalDays = Number(400).toLocaleString()
 
     list(
         request: PagedTimeSheetRequestDto,
