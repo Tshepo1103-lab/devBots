@@ -1,0 +1,49 @@
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  </head>
+  <div class="chat-message">
+    <div class="header">
+        <h1 >
+            Chat Room
+        </h1>
+    </div>
+    <div class="main" >
+      <div class="contact">
+        <h3 style="text-align: center;">Contacts</h3>
+        <div class="message" *ngFor="let contact of contacts" [ngClass]="{'sender-message': contact.username === current_user.username}">
+          
+          <div class="contact-info" (click)="changeChat(contact.username)">
+            <i class="fas fa-user contact-icon"></i>
+            <span class="contact-name" style="margin-left: 10px;">{{contact.username}}</span>
+          </div>
+        </div>
+      </div>
+    <ion-content class="chat-content">
+        <div class="message-container">
+        <div class="message" *ngFor="let message of messages" [ngClass]="{'sender-message': message.receiver === current_user.username}">
+          <div class="message-content">
+            <div class="message-header">
+              <span class="user" style="color:rgb(244, 234, 236);">{{ message.sender }}</span>
+            </div>
+            <div class="message-text" *ngIf="message.message">{{ message.message }}</div>
+          </div>
+        </div>
+        </div>
+        <ion-footer class="custom-footer">
+          <input [(ngModel)]="newMessage"  
+            style="color: black;background-color: rgb(222, 222, 222);"
+            placeholder="Type your message..." 
+            class="flex-grow"
+            id="messageContent"
+            />
+          <i (click)="sendMessage()" class="fas fa-paper-plane" style="margin-right: 50px;"></i>
+      
+        </ion-footer>
+    </ion-content>
+  </div>
+  </div>
+    
+  

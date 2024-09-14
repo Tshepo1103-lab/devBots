@@ -100,4 +100,6 @@ export class HomeComponent extends AppComponentBase implements AfterViewInit {
       console.error('Canvas element not found');
     }
   }
+
+  default(){}
 }  

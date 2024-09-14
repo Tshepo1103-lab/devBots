@@ -1,0 +1,231 @@
+/* Add this CSS to your styles file */
+.main{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+.chat-message{
+  height: 80vh !important;
+}
+.message-container {
+    display: flex;
+    flex-direction: column;
+    height: 70vh;
+
+    flex:1;
+    overflow-y: auto;
+    padding-bottom:50px;
+    margin:0 20px;
+
+    background-image: url('/assets/img/background.jpg') ;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  .contact{
+    width: 20%;
+    font-size: 20px;
+  }
+
+  .contact-info{
+    border: 2px solid black;
+    width:100%;
+    background-color: rgb(200, 200, 200);
+    padding: 0 2px;
+    margin: 0 2px;
+    height: 50px;
+
+    display: flex;
+    display: row;
+    align-items: center;
+
+  }
+  .chat-content{
+    width: 80%;
+    border:3px solid grey;
+    border-bottom:3px solid rgb(255, 250, 250);
+    height: 95vh;
+  }
+  .header{
+    display:flex;
+    justify-content: center;
+  }
+
+  .message {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+  
+  .sender-message {
+    align-self: flex-end;
+    /*background-color: #DCF8C6;  Background color for sender's messages */
+  }
+  
+  .profile-picture {
+    margin-right: 10px;
+  }
+  
+  .profile-picture img {
+    width: 50px; /* Adjust the size as needed */
+    height: 50px; /* Adjust the size as needed */
+    border-radius: 50%;
+  }
+  
+  .message-content {
+    background-color: #8a8a8a; /* Bubble background color */
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-right: 20px;
+    max-width: 100%; /* Adjust as needed */
+    min-width:200px;
+    position: relative;
+  }
+  
+  .message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  #messageContent{
+    width:90%;
+    height:100px;
+    border-radius: 8px;
+    font-size: 20px;
+    margin-right: 20px;
+  }
+  .user {
+    font-weight: bold;
+  }
+  
+  .timestamp {
+    font-size: 12px;
+  }
+  
+  .message-text {
+    margin-bottom: 5px;
+  }
+  
+  .message-image-medium,
+  .message-video {
+    max-width: 20%; /* Adjust as needed */
+    border-radius: 10px;
+  }
+  
+  
+  .selected-image-small { /* Adjust as needed */
+    border-radius: 10px;
+  }
+  
+  .selected-video {
+    max-width: 200px; /* Adjust as needed */
+    border-radius: 10px;
+  }
+  .custom-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-top: 20px;
+  }
+  
+  .add-media-icon {
+    cursor: pointer;
+  }
+  
+  .media-buttons {
+    display: flex;
+  }
+  
+  .media-buttons ion-button {
+    margin-right: 10px;
+  }
+  
+  
+  .message-content {
+    position: relative;
+  }
+  
+  .timestamp {
+    position: absolute;
+    bottom: -20px;
+    right: 0;
+  }
+  
+  
+  ion-input,
+  .send-button {
+    flex: 1;
+    margin: 0 10px;
+  }
+  
+  
+  ion-icon {
+    font-size: 14px;
+  }
+  .custom-footer ion-button {
+    min-width: 30px; /* Set a minimum width for the buttons */
+    flex: 1; /* Distribute available space evenly among buttons */
+    margin: 0.2rem; /* Add some margin between buttons */
+  }
+  
+  .custom-footer ion-icon {
+    font-size: 1.2rem; /* Adjust the icon size */
+    
+
+  }
+  
+  
+  /* Optionally, adjust the input field size */
+  .custom-footer ion-input {
+    flex-grow: 1; /* Allow the input field to grow and take available space */
+    margin-top: 20px;
+  }
+  .media-buttons ion-button {
+    margin-right: 5px; /* Reduce the margin between buttons */
+    font-size: 12px; /* Adjust the font size as needed */
+    padding: 5px 10px; /* Adjust the padding as needed */
+  }
+  .popup-container {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1;
+  }
+  
+  .popup-container.hidden {
+    display: none;
+  }
+  
+  .popup-container button {
+    margin: 5px;
+  }
+  
+  .selected-image-small,
+  .selected-video {
+    width: 100px;
+    height: auto;
+  }
+  .fa-file-video{
+    font-size: 30px; 
+    color: grey;
+    margin-right: 20px; 
+   
+  }
+  .fa-paper-plane{
+    font-size: 30px; 
+    color: grey;
+    margin-right: 20px; 
+   
+  }
+  .fa-file-image{
+    font-size: 30px; 
+    color: grey;
+    margin-right: 20px; 
+  }
+
+  

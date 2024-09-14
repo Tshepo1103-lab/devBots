@@ -14,6 +14,10 @@ import { ServiceProxyModule } from '@shared/service-proxies/service-proxy.module
 import { SharedModule } from '@shared/shared.module';
 import { HomeComponent } from '@app/home/home.component';
 import { AboutComponent } from '@app/about/about.component';
+import {IonicModule } from '@ionic/angular';
+import {AngularFireModule} from '@angular/fire/compat'
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 // tenants
 import { TenantsComponent } from '@app/tenants/tenants.component';
 import { CreateTenantDialogComponent } from './tenants/create-tenant/create-tenant-dialog.component';
@@ -43,7 +47,9 @@ import { SidebarMenuComponent } from './layout/sidebar-menu.component';
 
 import {TimeSheetCompoment} from './timesheets/timesheet.component';
 import {CreateTimeSheetDialogComponent} from './timesheets/create-timesheet/create-timesheet-dialog.component';
-
+import {EditTimeSheetDialogComponent} from './timesheets/edit-timesheet/edit-timesheet-dialog.component';
+import {ChatComponent} from './chat2/chat.component'
+import { environment } from '../environment';
 @NgModule({
     declarations: [
         AppComponent,
@@ -76,7 +82,11 @@ import {CreateTimeSheetDialogComponent} from './timesheets/create-timesheet/crea
 
         //Timesheet
         TimeSheetCompoment,
-        CreateTimeSheetDialogComponent 
+        CreateTimeSheetDialogComponent,
+        EditTimeSheetDialogComponent,
+
+        //chat
+        ChatComponent
     ],
     imports: [
         CommonModule,
@@ -92,6 +102,10 @@ import {CreateTimeSheetDialogComponent} from './timesheets/create-timesheet/crea
         ServiceProxyModule,
         SharedModule,
         NgxPaginationModule,
+        IonicModule,
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFireAuthModule, // Import required modules for Firebase services
+        AngularFirestoreModule
     ],
     providers: []
 })
