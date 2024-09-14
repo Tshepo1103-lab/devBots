@@ -9,7 +9,7 @@ import { TenantsComponent } from './tenants/tenants.component';
 import { RolesComponent } from 'app/roles/roles.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 import { TimeSheetCompoment } from './timesheets/timesheet.component';
-import {ChatComponent} from './chat2/chat.component'
+import {ChatComponent} from './chat/chat.component'
 
 @NgModule({
     imports: [
@@ -18,7 +18,7 @@ import {ChatComponent} from './chat2/chat.component'
                 path: '',
                 component: AppComponent,
                 children: [
-                    { path: 'home', component: HomeComponent,  canActivate: [AppRouteGuard] },
+                    { path: 'home', component: HomeComponent,  data: { permission: 'Pages.Roles' },canActivate: [AppRouteGuard] },
                     { path: 'users', component: UsersComponent, data: { permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
                     { path: 'roles', component: RolesComponent, data: { permission: 'Pages.Roles' }, canActivate: [AppRouteGuard] },
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },

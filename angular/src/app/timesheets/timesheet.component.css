@@ -17,13 +17,22 @@ h2 {
     font-weight: bold;
     margin-bottom: 0;
 }
-
+canvas {
+    width: 100% !important;
+    height: 400px; /* Adjust height as needed */
+  }
+  
 .export-csv-section {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 10px; /* Add some space between elements */
 }
+.chart-container {
+    width: 80%; /* Adjust as needed */
+    max-width: 800px; /* Set a maximum width */
+    margin: 0 auto; /* Center the container */
+  }
 
 .date-inputs {
     display: flex;

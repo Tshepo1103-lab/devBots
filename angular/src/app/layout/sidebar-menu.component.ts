@@ -43,7 +43,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
     getMenuItems(): MenuItem[] {
         return [
             new MenuItem(this.l('About'), '/app/about', 'fa-solid fa-info'),
-            new MenuItem(this.l('HomePage'), '/app/home', 'fa-solid fa-house'),
+            new MenuItem(this.l('Dashboard'), '/app/home', 'fa-solid fa-house','Pages.Users'),
             new MenuItem(
                 this.l('Roles'),
                 '/app/roles',
@@ -116,7 +116,7 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
             new MenuItem('Time Sheet','/app/timesheet','fas fa-clock','',[
             ]),
             new MenuItem(
-                this.l('chat'),
+                this.l('Chat'),
                 '/app/chat',
                 'fas fa-users',
             ),
