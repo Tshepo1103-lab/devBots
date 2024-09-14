@@ -9,6 +9,7 @@ import { TenantsComponent } from './tenants/tenants.component';
 import { RolesComponent } from 'app/roles/roles.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 import { TimeSheetCompoment } from './timesheets/timesheet.component';
+import {ChatComponent} from './chat2/chat.component'
 
 @NgModule({
     imports: [
@@ -23,7 +24,10 @@ import { TimeSheetCompoment } from './timesheets/timesheet.component';
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
                     { path: 'about', component: AboutComponent, canActivate: [AppRouteGuard] },
                     { path: 'update-password', component: ChangePasswordComponent, canActivate: [AppRouteGuard] },
-                    { path: 'timesheet', component: TimeSheetCompoment}
+                    { path: 'timesheet', component: TimeSheetCompoment, canActivate: [AppRouteGuard]},
+                    { path: 'chat', component: ChatComponent, canActivate: [AppRouteGuard]}
+
+
                 ]
             }
         ])

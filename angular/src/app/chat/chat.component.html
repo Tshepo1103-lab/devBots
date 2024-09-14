@@ -1,0 +1,65 @@
+<!-- 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  </head>
+  
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-back-button  defaultHref="/home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>
+          
+          Chat Room
+        </ion-title>
+      </ion-toolbar>
+    </ion-header>
+    
+    <ion-content class="chat-content">
+      <div class="message-container">
+        <div class="message" *ngFor="let message of messages" [ngClass]="{'sender-message': message.userid === current_user.username}">
+         
+          <div class="profile-picture">
+            <img [src]="message.profilePicture" alt="Profile Picture">
+          </div>
+    
+          
+          <div class="message-content">
+            <div class="message-header">
+              <span class="user">{{ message.userid }}</span>
+            </div>
+            <div class="message-text" *ngIf="message.message">{{ message.message }}</div>
+            <img *ngIf="message.imageUrl" [src]="message.imageUrl" alt="Image" class="message-image-medium" >
+  
+           
+          </div>
+        </div>
+      </div>
+    </ion-content>
+    <div #hiddenDiv>
+    </div>
+    
+    <ion-footer class="custom-footer">
+      <ion-input [(ngModel)]="newMessage"  style="color: black"     placeholder="Type your message..." class="flex-grow"></ion-input>
+    
+     
+        <i (click)="openImagePicker()" class="fas fa-file-image"></i>
+      
+      
+     
+      <input type="file" (change)="handleImageUpload($event)" accept="image/*" style="display: none;" id="imageInput">
+    
+      <img *ngIf="selectedImage" [src]="selectedImageURL" alt="Selected Image" class="selected-image-small">
+      
+    
+      <i (click)="sendMessage()" class="fas fa-paper-plane"></i>
+  
+      
+    </ion-footer>
+-->
+
+<div style="height:300px;width:300px;background-color: black;">
+    hello,world
+</div>

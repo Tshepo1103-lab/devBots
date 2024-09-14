@@ -789,7 +789,9 @@ export class TimeSheetServiceProxy {
         let url_ = this.baseUrl + "/api/services/app/TimeSheet/Update";
         url_ = url_.replace(/[?&]$/, "");
 
+        console.log('content',body)
         const content_ = JSON.stringify(body);
+        console.log('content',content_)
 
         let options_: any = {
             body: content_,
@@ -885,7 +887,7 @@ export class TimeSheetServiceProxy {
         return _observableOf(null as any);
     }
 
-    get(id: number | undefined): Observable<TimeSheetDto> {
+    get(id: string | undefined): Observable<TimeSheetDto> {
         let url_ = this.baseUrl + "/api/services/app/TimeSheet/Get?";
         if (id === null)
             throw new Error("The parameter 'id' cannot be null.");
@@ -3309,6 +3311,52 @@ export class TimeSheetDto implements ITimeSheetDto {
             this.id = _data["id"];
             this.timelog = _data["timeLog"];
             this.dateRecording = _data["dateRecording"] ? moment(_data["dateRecording"].toString()).format("YYYY-MM-DD") : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): TimeSheetDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new TimeSheetDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["timelog"] = this.timelog;
+        data["dateRecording"] = this.dateRecording;
+        return data;
+    }
+
+    clone(): TimeSheetDto {
+        const json = this.toJSON();
+        let result = new TimeSheetDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export class EditTimeSheetDto implements ITimeSheetDto {
+    id: string;
+    timelog: any;
+    dateRecording: moment.Moment;
+
+    constructor(data?: ITimeSheetDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            console.log('in dto',_data)
+            this.id = _data["id"];
+            this.timelog = _data["timelog"];
+            this.dateRecording = _data["dateRecording"]?moment(_data["dateRecording"].toString()).format("YYYY-MM-DD") : <any>undefined;
         }
     }
 

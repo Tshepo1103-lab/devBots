@@ -94,45 +94,61 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let role of roles | paginate : { id: 'server', itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalItems }">
-                  <td>{{ role.dateRecording }}</td>
-                  <td>{{ role.timelog.numberOfHours }}</td>
-                  <td>
-                    <button type="button" class="btn btn-sm bg-secondary" (click)="defaulter()">
-                      <i class="fas fa-pencil-alt"></i>
-                      {{ "Edit" | localize }}
-                    </button>
-                    <button type="button" class="btn btn-sm bg-danger mx-2" (click)="delete(role)">
-                      <i class="fas fa-trash"></i>
-                      {{ "Delete" | localize }}
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                <tr *ngFor="
+                    let role of roles
+                      | paginate
+                        : {
+                            id: 'server',
+                            itemsPerPage: pageSize,
+                            currentPage: pageNumber,
+                            totalItems: totalItems
+                          }
+                  ">
+                    <td>{{ role.dateRecording}}</td>
+                    <td>{{role.timelog.numberOfHours}}</td>
+                    <td>
+                      <button type="button"
+                        class="btn btn-sm bg-secondary"
+                        (click)="editTimeSheet(role)">
+                        <i class="fas fa-pencil-alt"></i>
+                        {{ "Edit" | localize }}
+                      </button>
+                      <button type="button"
+                        class="btn btn-sm bg-danger mx-2"
+                        (click)="delete(role)">
+                        <i class="fas fa-trash"></i>
+                        {{ "Delete" | localize }}
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-        <div class="card-footer table-card-footer bg-light border-top">
-          <div class="row">
-            <div class="col-sm-4 col-12 text-sm-left text-center">
-              <button class="btn btn-secondary" (click)="refresh()">
-                <i class="fas fa-redo-alt"></i>
-              </button>
-            </div>
-            <div class="col-sm-4 col-12 text-center">
-              <p class="mb-0 my-2">
-                {{ "TotalRecordsCount" | localize: totalItems }}
-              </p>
-            </div>
-            <div class="col-sm-4 col-12">
-              <div class="float-sm-right m-auto">
-                <abp-pagination-controls id="server" (pageChange)="getDataPage($event)">
-                </abp-pagination-controls>
+          <div class="card-footer table-card-footer bg-light border-top">
+            <div class="row">
+              <div class="col-sm-4 col-12 text-sm-left text-center">
+                <button class="btn btn-secondary"
+                  (click)="refresh()">
+                  <i class="fas fa-redo-alt"></i>
+                </button>
+              </div>
+              <div class="col-sm-4 col-12 text-center">
+                <p class="mb-0 my-2">
+                  {{ "TotalRecordsCount" | localize: totalItems }}
+                </p>
+              </div>
+              <div class="col-sm-4 col-12">
+                <div class="float-sm-right m-auto">
+                  <abp-pagination-controls id="server"
+                    (pageChange)="getDataPage($event)">
+                  </abp-pagination-controls>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-</div>
+    </section>
+  </div>
+

@@ -14,6 +14,7 @@ import {
 import { Observable } from 'rxjs';
 import { CreateTimeSheetDialogComponent } from './create-timesheet/create-timesheet-dialog.component';
 import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
+import { EditTimeSheetDialogComponent } from './edit-timesheet/edit-timesheet-dialog.component';
 
 class PagedTimeSheetRequestDto extends PagedRequestDto {
   keyword: string;
@@ -118,36 +119,41 @@ export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
         );
       }
 
-  defaulter(): void {
-
-  }
-  createTimeSheet(): void {
-    this.showCreateOrEditRoleDialog();
-  }
-  showCreateOrEditRoleDialog(id?: number): void {
-    let createOrEditRoleDialog: BsModalRef;
-    console.log('id', id)
-    if (!id) {
-      createOrEditRoleDialog = this._modalService.show(
-        CreateTimeSheetDialogComponent,
-        {
-          class: 'modal-lg',
-        }
-      );
-    } else {
-      createOrEditRoleDialog = this._modalService.show(
-        CreateTimeSheetDialogComponent,
-        {
-          class: 'modal-lg',
-          initialState: {
-            // id: id,
-          },
-        }
-      );
+    defaulter(): void {
+        
+    }
+    editTimeSheet(role: TimeSheetDto): void {
+      this.showCreateOrEditRoleDialog(role.id);
     }
 
-    createOrEditRoleDialog.content.onSave.subscribe(() => {
-      this.refresh();
-    });
-  }
+    createTimeSheet(): void {
+      this.showCreateOrEditRoleDialog();
+    }
+
+    showCreateOrEditRoleDialog(id?: string): void {
+        let createOrEditRoleDialog: BsModalRef;
+        console.log('id',id)
+        if (!id) {
+          createOrEditRoleDialog = this._modalService.show(
+            CreateTimeSheetDialogComponent,
+            {
+              class: 'modal-lg',
+            }
+          );
+        } else {
+          createOrEditRoleDialog = this._modalService.show(
+            EditTimeSheetDialogComponent,
+            {
+              class: 'modal-lg',
+              initialState: {
+               id: id,
+              },
+            }
+          );
+        }
+    
+        createOrEditRoleDialog.content.onSave.subscribe(() => {
+          this.refresh();
+        });
+    }
 }
