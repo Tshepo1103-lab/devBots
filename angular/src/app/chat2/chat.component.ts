@@ -3,6 +3,8 @@ import { AppComponentBase } from '@shared/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
+import { AppSessionService } from '@shared/session/app-session.service';
 import firebase from 'firebase/compat/app';
 import { Chart, registerables } from 'chart.js';
 import {message} from './messsages.model'
@@ -41,14 +43,8 @@ export class ChatComponent extends AppComponentBase implements OnInit {
     interests: []
   };
 
-  contacts:Contact[]=[
-    {username:'tshepo'},
-    {username:'pablo'},
-    {username:'sipha'},
-    {username:'jake'}
-
-  ]
-  constructor(injector: Injector,private firestore: AngularFirestore,private storage: AngularFireStorage) {
+  contacts:Contact[];
+  constructor(injector: Injector,private firestore: AngularFirestore,private storage: AngularFireStorage,private http: HttpClient, private abpsession:AppSessionService) {
     super(injector);
     this.eventChatCollection = this.firestore.collection<message>('chats', (msg) => msg.orderBy('createdTime'));
   }
@@ -63,6 +59,13 @@ export class ChatComponent extends AppComponentBase implements OnInit {
       error => {
         console.error('Error fetching messages:', error);
       });
+
+      this.getContact().subscribe((response:Contact[])=>{
+        this.contacts=response["result"];
+        console.log('data',response["result"])
+      })
+
+      this.current_user.username=this.abpsession.getShownLoginName();
   }
   
   getMessages(sender: string= this.current_user.username, receiver: string = this.profile.username): Observable<message[]> {
@@ -108,5 +111,10 @@ export class ChatComponent extends AppComponentBase implements OnInit {
       error => {
         console.error('Error fetching messages:', error);
       });
+  }
+
+  getContact(){
+    const url = 'https://localhost:44311/api/services/app/TimeSheet/GetAllUsers';
+    return this.http.get(url);
   }
 }  

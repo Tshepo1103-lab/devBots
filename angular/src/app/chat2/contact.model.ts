@@ -1,3 +1,4 @@
 export interface Contact{
-    username:string
+    id?:string,
+    userName:string
 }

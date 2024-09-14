@@ -15,9 +15,9 @@
         <h3 style="text-align: center;">Contacts</h3>
         <div class="message" *ngFor="let contact of contacts" [ngClass]="{'sender-message': contact.username === current_user.username}">
           
-          <div class="contact-info" (click)="changeChat(contact.username)">
+          <div class="contact-info" (click)="changeChat(contact.userName)">
             <i class="fas fa-user contact-icon"></i>
-            <span class="contact-name" style="margin-left: 10px;">{{contact.username}}</span>
+            <span class="contact-name" style="margin-left: 10px;">{{contact.userName}}</span>
           </div>
         </div>
       </div>
