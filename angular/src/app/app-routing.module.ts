@@ -9,7 +9,7 @@ import { TenantsComponent } from './tenants/tenants.component';
 import { RolesComponent } from 'app/roles/roles.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 import { TimeSheetCompoment } from './timesheets/timesheet.component';
-import {ChatComponent} from './chat/chat.component'
+import {ChatComponent} from './chat2/chat.component'
 
 @NgModule({
     imports: [
