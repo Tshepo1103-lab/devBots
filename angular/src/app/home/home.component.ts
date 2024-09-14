@@ -12,11 +12,11 @@ import { HttpClient } from '@angular/common/http';
 export class HomeComponent extends AppComponentBase implements AfterViewInit {
   @ViewChild('barChart') private chartRef: ElementRef;
   chart: any;
-  hoursToday: string = Number(2).toLocaleString();
-  hoursThisWeek: string = Number(10).toLocaleString();
-  hoursThisMonth: string = Number(150).toLocaleString();
-  hoursThisYear: string = Number(50000).toLocaleString(); 
-
+  hoursToday: string
+  hoursThisWeek: string 
+  hoursThisMonth: string 
+  hoursThisYear: string 
+  
   constructor(injector: Injector, private simpleCallsService: SimpleCallsServiceProxy, private http: HttpClient) {
     super(injector);
     Chart.register(...registerables); // Registering chart.js components
@@ -24,6 +24,7 @@ export class HomeComponent extends AppComponentBase implements AfterViewInit {
 
   ngAfterViewInit() {
     this.fetchChartData();
+    this.getAllAdminSumStats();
   }
 
   fetchChartData() {
@@ -86,5 +87,16 @@ export class HomeComponent extends AppComponentBase implements AfterViewInit {
     } else {
       console.error('Invalid data structure from API');
     }
+  }
+
+  getAllAdminSumStats() {
+    this.http.get('https://localhost:44311/api/services/app/TimeSheet/GetAllAdminSumStats').subscribe((response:any)=>{
+      this.hoursToday=response["result"].hoursDaily;
+      this.hoursThisWeek=response["result"].hoursweekly;
+      this.hoursThisMonth=response["result"].hoursMonthly;
+      this.hoursThisYear=response["result"].hoursYearly
+
+      console.log(this.hoursToday)
+    })
   }
 }
