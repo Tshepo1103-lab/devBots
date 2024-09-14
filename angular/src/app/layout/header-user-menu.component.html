@@ -1,10 +1,11 @@
 <li class="nav-item dropdown nav-user-menu" dropdown>
-  <a href="javascript:;" class="nav-link" dropdownToggle>
+  <a href="javascript:;" class="nav-link d-flex align-items-center" dropdownToggle>
     <img
       class="user-image img-circle elevation-2"
-      src="assets/img/user.png"
+      src="assets/img/blankicon.avif"
       alt="User Image"
     />
+    <div class="ml-2">{{ shownLoginName }}</div>
   </a>
   <div class="dropdown-menu dropdown-menu-right" *dropdownMenu>
     <a class="dropdown-item" [routerLink]="['update-password']">
