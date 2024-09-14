@@ -2,26 +2,38 @@ import { Component, Injector, ChangeDetectionStrategy, AfterViewInit, ElementRef
 import { AppComponentBase } from '@shared/app-component-base';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { Chart, registerables } from 'chart.js';
+import { SimpleCallsServiceProxy } from '@shared/services/simple-calls-service-proxy.service'
 
 Chart.register(...registerables);
 
 @Component({
   templateUrl: './home.component.html',
   animations: [appModuleAnimation()],
-  changeDetection: ChangeDetectionStrategy.OnPush, 
-  styleUrls:['./home.component.css']
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./home.component.css', '../../index.css']
 })
 export class HomeComponent extends AppComponentBase implements AfterViewInit {
   @ViewChild('barChart') private chartRef: ElementRef;
   chart: any;
 
-  constructor(injector: Injector) {
+  constructor(injector: Injector, private simpleCallsService: SimpleCallsServiceProxy) {
     super(injector);
   }
 
   ngAfterViewInit() {
     this.createChart();
   }
+
+  getMembers() {
+    this.simpleCallsService.getMembers().subscribe(data => {
+      console.log(data);
+    });
+  }
+
+  hoursToday = Number(2).toLocaleString()
+  hoursThisWeek = Number(10).toLocaleString()
+  hoursThisMonth = Number(150).toLocaleString()
+  hoursThisYear = Number(50000).toLocaleString()
 
   createChart() {
     const dummyData = {
@@ -64,15 +76,15 @@ export class HomeComponent extends AppComponentBase implements AfterViewInit {
         }
       ]
     };
-  
-    const labels = dummyData.weeklyStats[0].dailyStats.map(stat => 
+
+    const labels = dummyData.weeklyStats[0].dailyStats.map(stat =>
       new Date(stat.dateRecording).toLocaleDateString()
     );
-  
-    const data = dummyData.weeklyStats[0].dailyStats.map(stat => 
+
+    const data = dummyData.weeklyStats[0].dailyStats.map(stat =>
       stat.timeLogs.reduce((total, log) => total + log.numberOfHours, 0)
     );
-  
+
     if (this.chartRef && this.chartRef.nativeElement) {
       const ctx = this.chartRef.nativeElement.getContext('2d');
       this.chart = new Chart(ctx, {

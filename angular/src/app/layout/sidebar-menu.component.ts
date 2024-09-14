@@ -1,18 +1,19 @@
-import {Component, Injector, OnInit} from '@angular/core';
-import {AppComponentBase} from '@shared/app-component-base';
+import { Component, Injector, OnInit } from '@angular/core';
+import { AppComponentBase } from '@shared/app-component-base';
 import {
     Router,
     RouterEvent,
     NavigationEnd,
     PRIMARY_OUTLET
 } from '@angular/router';
-import {BehaviorSubject} from 'rxjs';
-import {filter} from 'rxjs/operators';
-import {MenuItem} from '@shared/layout/menu-item';
+import { BehaviorSubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { MenuItem } from '@shared/layout/menu-item';
 
 @Component({
     selector: 'sidebar-menu',
-    templateUrl: './sidebar-menu.component.html'
+    templateUrl: './sidebar-menu.component.html',
+    styleUrls: ["./layout.css"]
 })
 export class SidebarMenuComponent extends AppComponentBase implements OnInit {
     menuItems: MenuItem[];
@@ -31,18 +32,18 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
 
         this.router.events.subscribe((event: NavigationEnd) => {
             const currentUrl = event.url !== '/' ? event.url : this.homeRoute;
-                const primaryUrlSegmentGroup = this.router.parseUrl(currentUrl).root
-                    .children[PRIMARY_OUTLET];
-                if (primaryUrlSegmentGroup) {
-                    this.activateMenuItems('/' + primaryUrlSegmentGroup.toString());
-                }
+            const primaryUrlSegmentGroup = this.router.parseUrl(currentUrl).root
+                .children[PRIMARY_OUTLET];
+            if (primaryUrlSegmentGroup) {
+                this.activateMenuItems('/' + primaryUrlSegmentGroup.toString());
+            }
         });
     }
 
     getMenuItems(): MenuItem[] {
         return [
-            new MenuItem(this.l('About'), '/app/about', 'fas fa-info-circle'),
-            new MenuItem(this.l('HomePage'), '/app/home', 'fas fa-home'),
+            new MenuItem(this.l('About'), '/app/about', 'fa-solid fa-info'),
+            new MenuItem(this.l('HomePage'), '/app/home', 'fa-solid fa-house'),
             new MenuItem(
                 this.l('Roles'),
                 '/app/roles',

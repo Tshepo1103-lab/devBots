@@ -4,7 +4,7 @@ using System;
 
 namespace app.Domain
 {
-    public class TimeSheet: FullAuditedEntity<Guid>
+    public class TimeSheet : FullAuditedEntity<Guid>
     {
 
         public User? User { get; set; }
@@ -16,5 +16,9 @@ namespace app.Domain
         /// 
         /// </summary>
         public DateTime? DateRecording { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public int? Streak { get; set; }
     }
 }
