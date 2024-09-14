@@ -13,6 +13,7 @@ import {
 } from '@shared/service-proxies/service-proxies';
 
 import { CreateTimeSheetDialogComponent } from './create-timesheet/create-timesheet-dialog.component';
+import { EditTimeSheetDialogComponent } from './edit-timesheet/edit-timesheet-dialog.component';
 
 class PagedTimeSheetRequestDto extends PagedRequestDto {
   keyword: string;
@@ -34,7 +35,7 @@ export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
     
     
     roles:TimeSheetDto[];
-    pageSize = 5;
+    pageSize = 10;
     pageNumber =1;
     totalItems=0;
     default:string;
@@ -84,10 +85,15 @@ export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
     defaulter(): void {
         
     }
+    editTimeSheet(role: TimeSheetDto): void {
+      this.showCreateOrEditRoleDialog(role.id);
+    }
+
     createTimeSheet(): void {
       this.showCreateOrEditRoleDialog();
     }
-    showCreateOrEditRoleDialog(id?: number): void {
+
+    showCreateOrEditRoleDialog(id?: string): void {
         let createOrEditRoleDialog: BsModalRef;
         console.log('id',id)
         if (!id) {
@@ -99,11 +105,11 @@ export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
           );
         } else {
           createOrEditRoleDialog = this._modalService.show(
-            CreateTimeSheetDialogComponent,
+            EditTimeSheetDialogComponent,
             {
               class: 'modal-lg',
               initialState: {
-               // id: id,
+               id: id,
               },
             }
           );

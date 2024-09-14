@@ -113,7 +113,12 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
             //     ])
             // ]),
             new MenuItem('Time Sheet','/app/timesheet','fas fa-clock','',[
-            ])
+            ]),
+            new MenuItem(
+                this.l('chat'),
+                '/app/chat',
+                'fas fa-users',
+            ),
 
         ];
     }

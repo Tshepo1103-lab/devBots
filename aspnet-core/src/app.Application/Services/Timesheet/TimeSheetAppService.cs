@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using static app.Services.Timesheet.Dto.GraphDto;
 
@@ -50,7 +51,7 @@ namespace app.Services.TimeSheets
         /// <returns></returns>
         public async Task<TimeSheet> GetAsync(Guid id)
         {
-            return await _timesheetRepository.GetAsync(id);
+            return await _timesheetRepository.GetAllIncluding(x=>x.TimeLog).Where(x=>x.Id == id).FirstAsync();
         }
 
         /// <summary>
