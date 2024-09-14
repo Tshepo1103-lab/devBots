@@ -1,117 +1,90 @@
 import { Component, Injector, ChangeDetectionStrategy, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { AppComponentBase } from '@shared/app-component-base';
-import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { Chart, registerables } from 'chart.js';
-import { SimpleCallsServiceProxy } from '@shared/services/simple-calls-service-proxy.service'
-
-Chart.register(...registerables);
+import { SimpleCallsServiceProxy } from '@shared/services/simple-calls-service-proxy.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
+  selector: 'app-home',
   templateUrl: './home.component.html',
-  animations: [appModuleAnimation()],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./home.component.css', '../../index.css']
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent extends AppComponentBase implements AfterViewInit {
   @ViewChild('barChart') private chartRef: ElementRef;
   chart: any;
+  hoursToday: string = Number(2).toLocaleString();
+  hoursThisWeek: string = Number(10).toLocaleString();
+  hoursThisMonth: string = Number(150).toLocaleString();
+  hoursThisYear: string = Number(50000).toLocaleString(); 
 
-  constructor(injector: Injector, private simpleCallsService: SimpleCallsServiceProxy) {
+  constructor(injector: Injector, private simpleCallsService: SimpleCallsServiceProxy, private http: HttpClient) {
     super(injector);
+    Chart.register(...registerables); // Registering chart.js components
   }
 
   ngAfterViewInit() {
-    this.createChart();
+    this.fetchChartData();
   }
 
-  getMembers() {
-    this.simpleCallsService.getMembers().subscribe(data => {
-      console.log(data);
-    });
+  fetchChartData() {
+    const apiUrl = 'https://localhost:44311/api/services/app/TimeSheet/GetPeriodStats?periodStart=2024-01-01&periodEnd=2024-10-10';
+
+    // Make the HTTP request
+    this.http.get(apiUrl).subscribe(
+      (response: any) => {
+        const data = response.result; // Use the 'result' field from the API response
+        this.createChart(data);
+      },
+      (error) => {
+        console.error('Error fetching chart data', error);
+      }
+    );
   }
 
-  hoursToday = Number(2).toLocaleString()
-  hoursThisWeek = Number(10).toLocaleString()
-  hoursThisMonth = Number(150).toLocaleString()
-  hoursThisYear = Number(50000).toLocaleString()
+  createChart(data: any) {
+    if (data && data.weeklyStats && data.weeklyStats.length > 0) {
+      const dailyStats = data.weeklyStats[0].dailyStats;
 
-  createChart() {
-    const dummyData = {
-      periodStart: "2024-08-27T00:00:00",
-      periodEnd: "2024-09-02T00:00:00",
-      weeklyStats: [
-        {
-          weekStart: "2024-08-26T00:00:00",
-          weekEnd: "2024-09-01T00:00:00",
-          dailyStats: [
-            {
-              dateRecording: "2024-08-26T00:00:00",
-              timeLogs: [{ numberOfHours: 10 }]
-            },
-            {
-              dateRecording: "2024-08-24T00:00:00",
-              timeLogs: [{ numberOfHours: 10 }]
-            },
-            {
-              dateRecording: "2024-08-28T00:00:00",
-              timeLogs: [{ numberOfHours: 1 }]
-            },
-            {
-              dateRecording: "2024-08-29T00:00:00",
-              timeLogs: [{ numberOfHours: 5 }]
-            },
-            {
-              dateRecording: "2024-08-30T00:00:00",
-              timeLogs: [{ numberOfHours: 10 }]
-            },
-            {
-              dateRecording: "2024-08-31T00:00:00",
-              timeLogs: [{ numberOfHours: 10 }]
-            },
-            {
-              dateRecording: "2024-09-01T00:00:00",
-              timeLogs: [{ numberOfHours: 15 }]
-            }
-          ]
+      // Extract labels (dates) and data (hours)
+      const labels = dailyStats.map(stat => new Date(stat.dateRecording).toLocaleDateString());
+      const chartData = dailyStats.map(stat => 
+        stat.timeLogs.reduce((total, log) => total + log.numberOfHours, 0)
+      );
+
+      // Check if the chart reference is available and the canvas exists
+      if (this.chartRef && this.chartRef.nativeElement) {
+        const ctx = this.chartRef.nativeElement.getContext('2d');
+        if (this.chart) {
+          this.chart.destroy(); // Destroy previous chart to prevent overlap
         }
-      ]
-    };
 
-    const labels = dummyData.weeklyStats[0].dailyStats.map(stat =>
-      new Date(stat.dateRecording).toLocaleDateString()
-    );
-
-    const data = dummyData.weeklyStats[0].dailyStats.map(stat =>
-      stat.timeLogs.reduce((total, log) => total + log.numberOfHours, 0)
-    );
-
-    if (this.chartRef && this.chartRef.nativeElement) {
-      const ctx = this.chartRef.nativeElement.getContext('2d');
-      this.chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Hours Worked',
-              data: data,
-              backgroundColor: 'rgba(75, 192, 192, 0.6)'
-            },
-          ]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
+        // Create new chart
+        this.chart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: 'Hours Worked',
+                data: chartData,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true
+              }
             }
           }
-        }
-      });
+        });
+      } else {
+        console.error('Canvas element not found');
+      }
     } else {
-      console.error('Canvas element not found');
+      console.error('Invalid data structure from API');
     }
   }
-
-  default(){}
-}  
+}

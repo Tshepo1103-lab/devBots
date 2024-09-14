@@ -1,4 +1,4 @@
-import { Component, Injector } from '@angular/core';
+import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
@@ -15,7 +15,8 @@ import { Observable } from 'rxjs';
 import { CreateTimeSheetDialogComponent } from './create-timesheet/create-timesheet-dialog.component';
 import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
 import { EditTimeSheetDialogComponent } from './edit-timesheet/edit-timesheet-dialog.component';
-
+import { Router } from '@angular/router'; 
+import { Chart, registerables } from 'chart.js';
 class PagedTimeSheetRequestDto extends PagedRequestDto {
   keyword: string;
 
@@ -29,16 +30,28 @@ class PagedTimeSheetRequestDto extends PagedRequestDto {
 export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
   periodStart: string; // Declare periodStart
   periodEnd: string;   // Declare periodEnd
+  showGraph: boolean = false;
+  @ViewChild('barChart') private chartRef: ElementRef;
+  chart: any;
+  hoursToday: string = Number(2).toLocaleString();
+  hoursThisWeek: string = Number(10).toLocaleString();
+  hoursThisMonth: string = Number(150).toLocaleString();
+  hoursThisYear: string = Number(50000).toLocaleString(); 
   constructor(
         injector: Injector,
         private _rolesService: TimeSheetServiceProxy,
         private _modalService: BsModalService,
         private http: HttpClient,
+        private router: Router
       ) {
         super(injector);
+        Chart.register(...registerables); 
       }
     
-    
+      navigateToHomePage(): void {
+        this.router.navigate(['/app/home']);
+      }
+
     roles:TimeSheetDto[];
     pageSize = 5;
     pageNumber =1;
@@ -50,6 +63,12 @@ export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
   totalHours = Number(0).toLocaleString()
   totalDays = Number(0).toLocaleString()
 
+  toggleView(): void {
+    this.showGraph = !this.showGraph;
+    if (this.showGraph) {
+      this.fetchChartData(); // Fetch data when switching to graph view
+    }
+  }
   ngOnInit(): void {
     this.getAllSumStats().subscribe((response: any) => {
       console.log(response)
@@ -58,6 +77,11 @@ export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
       this.totalHours = Number(response.result.totalUserHours)?.toLocaleString() || "0.00";
       this.totalDays = Number(response.result.daysUserWorked).toLocaleString() || "0";
     });
+
+    this.periodEnd = new Date().toISOString();
+    const fourWeeksAgo = new Date();
+    fourWeeksAgo.setDate(fourWeeksAgo.getDate() - 28);
+    this.periodStart = fourWeeksAgo.toISOString() // Set periodStart to today  
   }
   getAllSumStats(): Observable<any> {
     const url = 'https://localhost:44311/api/services/app/TimeSheet/GetAllSumStats';
@@ -83,7 +107,76 @@ export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
             console.log(result)
           });
       }
-
+       fetchChartData() {
+        console.log(this.periodStart, this.periodEnd)
+        const apiUrl = `https://localhost:44311/api/services/app/TimeSheet/GetPeriodStats?periodStart=${new Date(this.periodStart).toISOString()}&periodEnd=${new Date(this.periodEnd).toISOString()}`;
+    
+        // Make the HTTP request
+        this.http.get(apiUrl).subscribe(
+          (response: any) => {
+            const data = response.result; // Use the 'result' field from the API response
+            this.createChart(data);
+          },
+          (error) => {
+            console.error('Error fetching chart data', error);
+          }
+        );
+      }
+    
+      createChart(data: any) {
+        if (data && data.weeklyStats && data.weeklyStats.length > 0) {
+          // Flatten all dailyStats from each week
+          const allDailyStats = data.weeklyStats.reduce((acc, week) => {
+            return acc.concat(week.dailyStats);
+          }, []);
+      
+          // Extract labels and data
+          const labels = allDailyStats.map(stat => new Date(stat.dateRecording).toLocaleDateString());
+          const chartData = allDailyStats.map(stat =>
+            stat.timeLogs.reduce((total, log) => total + log.numberOfHours, 0)
+          );
+      
+          if (this.chartRef && this.chartRef.nativeElement) {
+            const ctx = this.chartRef.nativeElement.getContext('2d');
+            if (ctx) {
+              if (this.chart) {
+                this.chart.destroy(); // Destroy previous chart to prevent overlap
+              }
+      
+              this.chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: labels,
+                  datasets: [
+                    {
+                      label: 'Hours Worked',
+                      data: chartData,
+                      backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                    }
+                  ]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false, // Allow custom size
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  }
+                }
+              });
+            } else {
+              console.error('Canvas context not found');
+            }
+          } else {
+            console.error('Canvas element not found');
+          }
+        } else {
+          console.error('Invalid data structure from API', data);
+        }
+      }
+      
+      
       exportToCSV(periodS: string = new Date(this.periodStart).toISOString(), periodE: string = new Date(this.periodEnd).toISOString()): void {
         const url = `https://localhost:44311/api/services/app/TimeSheet/ExportAsCSV?periodStart=${periodS}&periodEnd=${periodE}`; // URL to web api
         this.http.post(url, {}, { responseType: 'blob' as 'json' }).subscribe((response: Blob) => {
@@ -154,6 +247,13 @@ export class TimeSheetCompoment extends PagedListingComponentBase<TimeSheetDto>{
     
         createOrEditRoleDialog.content.onSave.subscribe(() => {
           this.refresh();
+          this.getAllSumStats().subscribe((response: any) => {
+            console.log(response)
+            // Assuming response contains these fields
+            this.dailyStreak = response.result.totalUserStreak || "0";
+            this.totalHours = Number(response.result.totalUserHours)?.toLocaleString() || "0.00";
+            this.totalDays = Number(response.result.daysUserWorked).toLocaleString() || "0";
+          });
         });
     }
 }
