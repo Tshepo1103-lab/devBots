@@ -17,6 +17,9 @@ using static app.Services.Timesheet.Dto.GraphDto;
 using app.Services.Timesheet.Dto.Read;
 using System.Text;
 using System.IO;
+using app.Authorization.Roles;
+using app.Users.Dto;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace app.Services.TimeSheets
@@ -24,12 +27,14 @@ namespace app.Services.TimeSheets
     [AbpAuthorize]
     public class TimeSheetAppService : ApplicationService, ITimeSheetAppService
     {
+        private readonly IRepository<User, long> _userRepository;
         private readonly IRepository<TimeSheet, Guid> _timesheetRepository;
         private readonly UserManager _userManager;
         private readonly TimeLogAppService _timelogService;
 
-        public TimeSheetAppService(IRepository<TimeSheet, Guid> timesheetRepository, UserManager userManager, TimeLogAppService timelogService)
+        public TimeSheetAppService(IRepository<User, long> userRepository,IRepository<TimeSheet, Guid> timesheetRepository, UserManager userManager, TimeLogAppService timelogService)
         {
+            _userRepository = userRepository;
             _timesheetRepository = timesheetRepository;
             _userManager = userManager;
             _timelogService = timelogService;
@@ -110,6 +115,26 @@ namespace app.Services.TimeSheets
             return await _timesheetRepository.InsertAsync(input);
         }
 
+        /// <summary>
+        /// Gets all users in the system.
+        /// </summary>
+        /// <returns>A list of users.</returns>
+        [HttpGet]
+        public async Task<List<UserDto>> GetAllUsersAsync()
+        {
+            var users = await _userRepository.GetAllListAsync();
+            var userDtos = new List<UserDto>();
+            foreach (var user in users)
+            {
+                var userDto = new UserDto()
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                };
+                userDtos.Add(userDto);
+            }
+            return userDtos;
+        }
 
         [HttpGet]
         public async Task<PeriodStatsDto> GetPeriodStats(DateTime periodStart, DateTime periodEnd)
@@ -178,6 +203,7 @@ namespace app.Services.TimeSheets
             };
         }
 
+        [HttpPost]
         public async Task<FileStreamResult> ExportAsCSV(DateTime periodStart, DateTime periodEnd)
         {
             var periodStats = await GetPeriodStats(periodStart, periodEnd);
@@ -201,8 +227,6 @@ namespace app.Services.TimeSheets
 
             return new FileStreamResult(stream, "text/csv") { FileDownloadName = $"{userName}.csv" };
         }
-
-
 
     }
 }

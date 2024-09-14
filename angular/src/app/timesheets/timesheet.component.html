@@ -3,8 +3,7 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-lg-4 col-6">
-          <div class="small-box" [ngStyle]="{ background: '#ffbf00','border-radius': '20px', 'padding': '15px',
-          'box-shadow': '#7b7d3bd4 -12px 12px 8px'}">
+          <div class="small-box" [ngStyle]="{ background: '#ffbf00', 'border-radius': '20px', 'padding': '15px', 'box-shadow': '#7b7d3bd4 -12px 12px 8px'}">
             <div class="inner">
               <h2 class="text-bold" [ngStyle]="{'color': '#ffffff'}">{{dailyStreak}} Day(s)</h2>
               <p [ngStyle]="{'color': '#ffffff', 'font-weight': '700'}">Daily Streak</p>
@@ -15,8 +14,7 @@
           </div>
         </div>
         <div class="col-lg-4 col-6">
-          <div class="small-box" [ngStyle]="{ background: '#00f1ff','border-radius': '20px', 'padding': '15px',
-          'box-shadow': '#3b6d7dd4 -12px 12px 8px'}">
+          <div class="small-box" [ngStyle]="{ background: '#00f1ff', 'border-radius': '20px', 'padding': '15px', 'box-shadow': '#3b6d7dd4 -12px 12px 8px'}">
             <div class="inner">
               <h2 class="text-bold" [ngStyle]="{'color': '#ffffff'}">{{totalHours}}</h2>
               <p [ngStyle]="{'color': '#ffffff', 'font-weight': '700'}">Total Hours</p>
@@ -27,11 +25,10 @@
           </div>
         </div>
         <div class="col-lg-4 col-6">
-          <div class="small-box" [ngStyle]="{ background: '#0087ff','border-radius': '20px', 'padding': '15px',
-          'box-shadow': '#3b587dd4 -12px 12px 8px'}">
+          <div class="small-box" [ngStyle]="{ background: '#0087ff', 'border-radius': '20px', 'padding': '15px', 'box-shadow': '#3b587dd4 -12px 12px 8px'}">
             <div class="inner">
               <h2 class="text-bold" [ngStyle]="{'color': '#ffffff'}">{{totalDays}}</h2>
-              <p [ngStyle]="{'color': '#ffffff', 'font-weight': '700'}">Total days</p>
+              <p [ngStyle]="{'color': '#ffffff', 'font-weight': '700'}">Total Days</p>
             </div>
             <div class="icon">
               <i class="fa fa-sun"></i>
@@ -39,20 +36,35 @@
           </div>
         </div>
       </div>
-
-      <div class="row">
-        <div class="col-6">
-          <h1>{{ "Timesheet" | localize }}</h1>
+      <div class="row align-items-center mb-3">
+        <div class="col-md-6">
+          <h1 class="timesheet-title">{{ "Timesheet" | localize }}</h1>
         </div>
-        <div class="col-6 text-right">
-          <a href="javascript:;" class="btn bg-blue" (click)="createTimeSheet()">
-            <i class="fa fa-plus-square"></i>
-            {{ "Create" | localize }}
-          </a>
+        <div class="col-md-6">
+          <div class="export-csv-section">
+            <div class="date-inputs">
+              <label for="start-date">Start Date:</label>
+              <input type="date" id="start-date" [(ngModel)]="periodStart">
+              
+              <label for="end-date">End Date:</label>
+              <input type="date" id="end-date" [(ngModel)]="periodEnd">
+            </div>
+            <div class="action-buttons">
+              <a href="javascript:;" class="btn btn-primary" (click)="exportToCSV()">
+                <i class="fa fa-file-export"></i>
+                {{ "Export CSV" | localize }}
+              </a>
+              <a href="javascript:;" class="btn btn-success" (click)="createTimeSheet()">
+                <i class="fa fa-plus"></i>
+                {{ "Create" | localize }}
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </section>
+
   <section class="content px-2">
     <div class="container-fluid">
       <div class="card">
@@ -66,8 +78,7 @@
                     <i class="fas fa-search"></i>
                   </button>
                 </div>
-                <input type="text" class="form-control" name="keyword" [placeholder]="'SearchWithThreeDot' | localize"
-                  [(ngModel)]="default" (keyup.enter)="getDataPage(1)" />
+                <input type="text" class="form-control" name="keyword" [placeholder]="'SearchWithThreeDot' | localize" [(ngModel)]="default" (keyup.enter)="getDataPage(1)" />
               </div>
             </div>
           </div>
@@ -140,3 +151,4 @@
       </div>
     </section>
   </div>
+
